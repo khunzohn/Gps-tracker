@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
+    tools:context="com.hilllander.khunzohn.gpstracker.MarketActivity">
+
+
+    <include layout="@layout/content_market" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="120dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/indicatorZero"
+            layout="@layout/include_circle" />
+
+        <include
+            android:id="@+id/indicatorOne"
+            layout="@layout/include_circle" />
+
+        <include
+            android:id="@+id/indicatorTwo"
+            layout="@layout/include_circle" />
+
+        <include
+            android:id="@+id/indicatorThree"
+            layout="@layout/include_circle" />
+    </LinearLayout>
+
+</FrameLayout>
