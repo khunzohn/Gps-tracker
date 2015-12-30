@@ -123,12 +123,16 @@ public class MarketActivity extends AppCompatActivity {
             test.setText(String.valueOf(position));
             switch (position) {
                 case 0:
+                    test.setText(R.string.instruction_one);
                     break;
                 case 1:
+                    test.setText(R.string.instruction_two);
                     break;
                 case 2:
+                    test.setText(R.string.instruction_three);
                     break;
                 case 3:
+                    test.setText(R.string.instruction_four);
                     break;
             }
             return view;
