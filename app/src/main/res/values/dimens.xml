@@ -8,4 +8,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="height_content_gap">56dp</dimen>
     <dimen name="small_margin">4dp</dimen>
+    <dimen name="instruction_label_padding">16dp</dimen>
+    <dimen name="edit_text_padding">4dp</dimen>
 </resources>

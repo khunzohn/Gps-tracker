@@ -10,7 +10,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/height_content_gap"
-        android:textColor="@color/colorAccent" />
+        android:gravity="center_horizontal"
+        android:padding="@dimen/instruction_label_padding"
+        android:text="@string/instruction_four"
+        android:textColor="@android:color/white" />
 
     <LinearLayout
         android:id="@+id/barToggleConnect"
@@ -27,14 +30,13 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/label_connect_by_texting"
-            android:textColor="@color/toggle_connect_selecter"
-            android:textIsSelectable="true" />
+            android:textColor="@color/toggle_connect_selecter" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/small_margin"
-            android:background="@color/colorAccent" />
+            android:background="@color/pink_100" />
 
         <mm.technomation.mmtext.MMTextView
             android:id="@+id/tvPhoneConnect"
@@ -42,8 +44,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/label_connect_by_phone"
-            android:textColor="@color/toggle_connect_selecter"
-            android:textIsSelectable="true" />
+            android:textColor="@color/toggle_connect_selecter" />
     </LinearLayout>
 
     <mm.technomation.mmtext.MMTextView
@@ -54,15 +55,19 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/height_content_gap"
         android:text="@string/label_input_simcard_number"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@android:color/white" />
 
     <EditText
         android:id="@+id/etSimNum"
-        android:layout_width="400dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvInputSimCard"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint_sim_number" />
+        android:background="@color/grey"
+        android:ems="10"
+        android:hint="@string/hint_sim_number"
+        android:inputType="phone"
+        android:padding="@dimen/edit_text_padding" />
 
     <mm.technomation.mmtext.MMButtonView
         android:id="@+id/btConnect"
@@ -70,26 +75,34 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etSimNum"
         android:layout_centerHorizontal="true"
-        android:text="@string/button_connect" />
+        android:text="@string/button_connect"
+        android:textColor="@android:color/white" />
 
     <FrameLayout
+        android:id="@+id/warningContent"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></FrameLayout>
 
-        <mm.technomation.mmtext.MMTextView
-            android:id="@+id/tvTextConnectWarn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/warning_message_for_texting_connect"
-            android:textColor="@color/colorAccent" />
 
-        <mm.technomation.mmtext.MMTextView
-            android:id="@+id/tvTextPhoneWarn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/warning_message_for_phone_connect"
-            android:textColor="@color/colorAccent"
-            android:visibility="gone" />
-    </FrameLayout>
+    <!--<mm.technomation.mmtext.MMTextView
+        android:id="@+id/tvTextConnectWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/warning_message_for_texting_connect"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/instruction_label_padding"
+        android:textColor="@color/colorAccent"
+        />
+
+    <mm.technomation.mmtext.MMTextView
+        android:id="@+id/tvPhoneConnectWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/warning_message_for_phone_connect"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/instruction_label_padding"/>-->
+
+
 </RelativeLayout>
