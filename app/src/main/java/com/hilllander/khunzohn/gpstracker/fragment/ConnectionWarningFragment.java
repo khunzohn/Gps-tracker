@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hilllander.khunzohn.gpstracker.MarketActivity;
 import com.hilllander.khunzohn.gpstracker.R;
 
 import mm.technomation.mmtext.MMTextView;
@@ -38,10 +37,10 @@ public class ConnectionWarningFragment extends Fragment {
         int connectorFlag = getArguments().getInt(KEY_CONNECTOR_FLAG);
         String warning = "";
         switch (connectorFlag) {
-            case MarketActivity.TEXT:
+            case MarketingFragments.TEXT:
                 warning = getActivity().getString(R.string.warning_message_for_texting_connect);
                 break;
-            case MarketActivity.PHONE:
+            case MarketingFragments.PHONE:
                 warning = getActivity().getString(R.string.warning_message_for_phone_connect);
                 break;
         }

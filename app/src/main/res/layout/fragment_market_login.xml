@@ -82,27 +82,6 @@
         android:id="@+id/warningContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"></FrameLayout>
-
-
-    <!--<mm.technomation.mmtext.MMTextView
-        android:id="@+id/tvTextConnectWarn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/warning_message_for_texting_connect"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/instruction_label_padding"
-        android:textColor="@color/colorAccent"
-        />
-
-    <mm.technomation.mmtext.MMTextView
-        android:id="@+id/tvPhoneConnectWarn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/warning_message_for_phone_connect"
-        android:textColor="@color/colorAccent"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/instruction_label_padding"/>-->
-
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
