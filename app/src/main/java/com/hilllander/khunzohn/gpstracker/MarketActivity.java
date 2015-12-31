@@ -116,25 +116,28 @@ public class MarketActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_market, container, false);
             Bundle args = getArguments();
             int position = args.getInt(KEY_POSITION);
-            TextView test = (TextView) view.findViewById(R.id.test);
-            test.setText(String.valueOf(position));
-            switch (position) {
-                case 0:
-                    test.setText(R.string.instruction_one);
-                    break;
-                case 1:
-                    test.setText(R.string.instruction_two);
-                    break;
-                case 2:
-                    test.setText(R.string.instruction_three);
-                    break;
-                case 3:
-                    test.setText(R.string.instruction_four);
-                    break;
+            View view;
+            if (position == NUM_PAGES - 1) {
+                view = inflater.inflate(R.layout.fragment_market_login, container, false);
+            } else {
+                view = inflater.inflate(R.layout.fragment_market, container, false);
+                TextView test = (TextView) view.findViewById(R.id.test);
+                test.setText(String.valueOf(position));
+                switch (position) {
+                    case 0:
+                        test.setText(R.string.instruction_one);
+                        break;
+                    case 1:
+                        test.setText(R.string.instruction_two);
+                        break;
+                    case 2:
+                        test.setText(R.string.instruction_three);
+                        break;
+                }
             }
+
             return view;
         }
     }

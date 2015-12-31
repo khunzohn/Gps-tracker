@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/height_content_gap"
+        android:textColor="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/barToggleConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvInstruction"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/height_content_gap"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvTextConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/label_connect_by_texting"
+            android:textColor="@color/toggle_connect_selecter"
+            android:textIsSelectable="true" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/small_margin"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tvPhoneConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/label_connect_by_phone"
+            android:textColor="@color/toggle_connect_selecter"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvInputSimCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/barToggleConnect"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/height_content_gap"
+        android:text="@string/label_input_simcard_number"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
+        android:id="@+id/etSimNum"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvInputSimCard"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/hint_sim_number" />
+
+    <Button
+        android:id="@+id/btConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSimNum"
+        android:layout_centerHorizontal="true"
+        android:text="@string/button_connect" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tvTextConnectWarn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/warning_message_for_texting_connect"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tvTextPhoneWarn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/warning_message_for_phone_connect"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone" />
+    </FrameLayout>
+</RelativeLayout>

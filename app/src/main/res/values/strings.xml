@@ -5,18 +5,55 @@
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="welcome_logo">Gps Tracker</string>
     <string name="title_activity_market">MarketActivity</string>
-    <string name="instruction_one">ဆင္းကဒ္နဲံဘက္ထရီကို ကိရိယာမှာတပ္ဆင္ပါ.\n
-    မှတ္ခ်က္.....GSM ဆင္းကဒ္မ်ားသာရပါမည္.</string>
-    <string name="instruction_two">GPS ရဲ့ on/off ခလုတ္ကိုမီးလင္းလာသည္အထိ ၄ ၅ စက္ကန့္ခန့္ဖိကာ အေဆာက္အအံုျပင္ပမှာထားပါ.\n
-    မှတ္ခ်က္....GPS၏ပံုပါတဲ့မ်က္နာျပင္ အထက္ဖက္လှည့္ေနရပါမည္.</string>
-    <string name="instruction_three">၄၅စက္ကန့္ခန့္ျကာျပီးေနာက္GPSစတင္အလုပ္လုပ္ပါမည္.</string>
-    <string name="instruction_four">GPS ကိုမိမိဖုန္းနဲ့ခ်ိတ္ဆက္ပါမည္.\n
-    မှတ္ခ်က္....GPS မီးလင္းျပီးအနည္းဆံုး ၄၅ စဣန့္ျကာမှသာစတင္ခ်ိတ္ဆက္ပါ.</string>
-    <string name="label_input_simcard_number">GPS မှာတပ္ဆင္ထားေသာဆင္းကဒ္နံပါတ္ထဲ့ပါ.</string>
-    <string name="button_connect">ခ်ိတ္ဆက္မယ္</string>
-    <string name="label_connect_by_texting">စာပို့ျပီးခ်ိတ္ဆက္မယ္</string>
-    <string name="label_connect_by_phone">ဖုန္းေခါ္ျပီးခ်ိတ္ဆက္မယ္</string>
-    <string name="warning_message_for_texting_connect">မှတ္ခ်က္ .... စာပို့ျပီး ခ်ိတ္ဆက္မည္ ျဖစ္သျဖင့္ မိမိဖုန္းလက္က်န္ေငအလံုအေလာက္ရှိရန္လိုသည္.</string>
-    <string name="warning_message_for_phone_connect">မှတ္ခ်က္ .... ဖုန္းေဘလ္ မျဖတ္ပါ. miss call ေခါဖို့လံုေလာက္ေသာေဘလ္ရိှရင္ရပါျပီ.</string>
+    <string name="instruction_one">ဆင်းကဒ်နဲ့ဘထ္ထရီကို GPS တွင်တပ်ဆင်ပါ။\n
+(မှတ်ချက်။   ။GSM ဆင်းကဒ်များသာရပါမည်။ </string>
+    <string name="instruction_two">GPS ရဲ့ on/off  ခလုတ်ကိုမီးပွင့် လာသည် အထိ ၄ ၊ ၅ စက္ကန့်ခန့် ဖိကာ အဆောက်အအုံ ပြင်ပတွင်ထားပါ။\n (မှတ်ချက်။   ။ GPS ရဲ့ ပုံပါတဲ့မျက်နှာပြင်က ကောင်းကင်သို့မျက်နှာမူရပါမည်။ </string>
+    <string name="instruction_three">၄၅ စက္ကန့် ကြာပြီးနောက် GPS စတင်အလုပ်လုပ်ပါမည်။</string>
+    <string name="instruction_four">GPS ကိုမိမိ ဖုန်းနှင့် ချိတ်ပါမည်။ \n
+(မှတ်ချက်။   ။ GPS ပွင့်ပြီးအနည်းဆုံး ၄၅ စက္ကန့်ကြာမှသာ စတင်ဆက်သွယ်ပါ။</string>
+    <string name="label_input_simcard_number">GPS မှာတပ်ဆင်ထားသော ဆင်းကဒ်နံပါတ်ထဲ့ပါ။</string>
+    <string name="button_connect">ချိတ်ဆက်မယ်</string>
+    <string name="label_connect_by_texting">စာပို့ပြီးချိတ်မယ်</string>
+    <string name="label_connect_by_phone">ဖုန်းခေါ်ပြီးချိတ်မယ်</string>
+    <string name="warning_message_for_texting_connect">မှတ်ချက်။   ။စာပို့ပြီးချိတ်ဆက်မည် ဖြစ်သဖြင့် မိမိဖုန်းတွင်လက်ကျန်ငွေ အလုံအလောက်ရှိရန်လိုအပ်ပါမည်။</string>
+    <string name="warning_message_for_phone_connect">မှတ်ချက်။   ။ဖုန်းဘေလ်မဖြတ်ပါ။ miss call ခေါ်ရန်လုံလောက်သောလက်ကျန်ငွေရှိရင်ရပါပြီ။</string>
     <string name="action_settings">Settings</string>
+    <string name="hint_sim_number">+959753362189</string>
+
+    <string name="dialog_title_connecting">ချိတ်ဆက်နေသည်...</string>
+    <string name="dialog_message_connecting">စက္ကန့် ၃၀ ခန့်ကြာပါမည်။</string>
+    <string name="dialog_title_connecting_failed">မအောင်မြင်ပါ။\nဖြစ်နိုင်ခေျများ</string>
+<string name="dialog_reason_connecting_failed">-GPS မပွင့်သေးပါ။\n
+-ပွင့်ပေမဲ့ ၄၅ စက္ကန့်မကြာသေးပါ။\nဖုန်းလိုင်းပျက်နေသည်။\nဖုန်းဘေလ်မရှိတော့ပါ။\nGPS မျက်နှာ အပေါ် 
+လှည့်မနေပါ။</string>
+    <string name="label_add_more_gps">GPS ထပ်ပေါင်းမယ်။</string>
+    <string name="label_gps_name">နာမည်</string>
+    <string name="label_gps_place">နေရာ</string>
+    <string name="label_gps_time_last_tracked">နောက်ဆုံးခြေရာခံချိန်</string>
+    <string name="label_gps_latitude">လတ္တီတွတ်</string>
+    <string name="label_gps_longitude">လောင်တီတွတ်</string>
+    <string name="label_action_go_to_map">မြေပုံမှာကြည့်မယ် ></string>
+    <string name="title_set_password">လျို့ဝှက်ကုဒ်ထဲ့မယ်</string>
+    <string name="title_change_password">လျို့ဝှက်ကုဒ်ပြောင်းမယ်</string>
+    <string name="title_remove_password">လျို့ဝှက်ကုဒ်ဖြုတ်မယ်</string>
+    <string name="label_enter_password">လျို့ဝှက်ကုဒ်ထဲ့ပါ</string>
+    <string name="label_re_enter_password">နောက်တစ်ကြိမ်ထဲ့ပါ</string>
+    <string name="button_ok">ကောင်းပြီ</string>
+    <string name="label_wrong_password_pattern">နှစ်သက်ရာဂဏန်း၆ လုံးတိတိသာ</string>
+    <string name="label_password_mismatch">လျို့ဝှက်ကုဒ်ချင်းမတူပါ</string>
+    <string name="label_enter_old_password">လျို့ဝှက်ကုဒ်အဟောင်းထဲ့ပါ</string>
+    <string name="label_enter_new_password">လျို့ဝှက်ကုဒ်အသစ်ထဲ့ပါ</string>
+    <string name="button_change">ပြောင်းမယ်</string>
+    <string name="label_action_forget_password">လျို့ဝှက်ကုဒ်မေ့နေတယ်</string>
+    <string name="button_remove">ဖြုတ်မယ်</string>
+    <string name="button_cancel">ခဏလေး</string>
+    <string name="label_gps_type">အမျိုးအစား</string>
+    <string name="label_gps_sim_number">ဆင်းကဒ်နံပါတ်</string>
+    <string name="button_fine">ရပြီ</string>
+    <string name="label_action_change">ပြောင်းမယ်</string>
+    <string name="label_toggle_action_authorized">ဤဖုန်းဖြင့်သာခြေရာခံနိုင်သည်</string>
+    <string name="label_toggle_action_un_authorized"> အခြားဖုန်း များဖြင့်လည်း ခြေရာခံနိုင်သည် </string>
+    <string name="label_action_locate_gps">အခုဘယ်မှာလဲ</string>
+    <string name="label_with_you">အသင်နှင့်</string>
+    <string name="label_located_at_meters_away">မီတာ အကွာတွင်ရှိပါသည်</string>
 </resources>
