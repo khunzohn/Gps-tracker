@@ -11,10 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import mm.technomation.mmtext.MMTextView;
 
 public class MarketActivity extends AppCompatActivity {
     private static final int NUM_PAGES = 4;
@@ -123,17 +124,17 @@ public class MarketActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.fragment_market_login, container, false);
             } else {
                 view = inflater.inflate(R.layout.fragment_market, container, false);
-                TextView test = (TextView) view.findViewById(R.id.test);
-                test.setText(String.valueOf(position));
+                MMTextView tvIstruction = (MMTextView) view.findViewById(R.id.tvInstruction);
+                tvIstruction.setText(String.valueOf(position));
                 switch (position) {
                     case 0:
-                        test.setText(R.string.instruction_one);
+                        tvIstruction.setText(R.string.instruction_one);
                         break;
                     case 1:
-                        test.setText(R.string.instruction_two);
+                        tvIstruction.setText(R.string.instruction_two);
                         break;
                     case 2:
-                        test.setText(R.string.instruction_three);
+                        tvIstruction.setText(R.string.instruction_three);
                         break;
                 }
             }

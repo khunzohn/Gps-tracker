@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <mm.technomation.mmtext.MMTextView
         android:id="@+id/tvInstruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:layout_marginTop="@dimen/height_content_gap"
         android:gravity="center">
 
-        <TextView
+        <mm.technomation.mmtext.MMTextView
             android:id="@+id/tvTextConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_margin="@dimen/small_margin"
             android:background="@color/colorAccent" />
 
-        <TextView
+        <mm.technomation.mmtext.MMTextView
             android:id="@+id/tvPhoneConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:textIsSelectable="true" />
     </LinearLayout>
 
-    <TextView
+    <mm.technomation.mmtext.MMTextView
         android:id="@+id/tvInputSimCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/hint_sim_number" />
 
-    <Button
+    <mm.technomation.mmtext.MMButtonView
         android:id="@+id/btConnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,14 +77,14 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true">
 
-        <TextView
+        <mm.technomation.mmtext.MMTextView
             android:id="@+id/tvTextConnectWarn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/warning_message_for_texting_connect"
             android:textColor="@color/colorAccent" />
 
-        <TextView
+        <mm.technomation.mmtext.MMTextView
             android:id="@+id/tvTextPhoneWarn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
