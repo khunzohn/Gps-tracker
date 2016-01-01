@@ -12,7 +12,7 @@ import com.hilllander.khunzohn.gpstracker.R;
 import mm.technomation.mmtext.MMTextView;
 
 /**
- * Created by ubunphyu on 12/31/15.
+ *Created by khunzohn on 12/31/15.
  */
 public class ConnectionWarningFragment extends Fragment {
     private static final String KEY_CONNECTOR_FLAG = "connector flag";

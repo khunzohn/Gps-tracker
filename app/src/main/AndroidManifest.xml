@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MarketActivity"
+            android:name=".MarketingActivity"
             android:label="@string/title_activity_market"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

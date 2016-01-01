@@ -17,7 +17,7 @@ public class WelcomeActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent market = new Intent(WelcomeActivity.this, MarketActivity.class);
+                Intent market = new Intent(WelcomeActivity.this, MarketingActivity.class);
                 startActivity(market);
                 finish();
             }

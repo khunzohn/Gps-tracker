@@ -5,20 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.hilllander.khunzohn.gpstracker.MarketActivity;
+import com.hilllander.khunzohn.gpstracker.MarketingActivity;
 import com.hilllander.khunzohn.gpstracker.R;
 
 import mm.technomation.mmtext.MMButtonView;
 import mm.technomation.mmtext.MMTextView;
 
 /**
- * Created by ubunphyu on 12/31/15.
+ *Created by khunzohn on 12/31/15.
  */
 public class MarketingFragments extends Fragment {
     public static final int TEXT = 10;
@@ -48,7 +47,7 @@ public class MarketingFragments extends Fragment {
         try {
             connector = (Connector) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("MarketActivity must implement Connector interface.");
+            throw new ClassCastException("MarketingActivity must implement Connector interface.");
         }
         super.onAttach(context);
     }
@@ -65,17 +64,26 @@ public class MarketingFragments extends Fragment {
         Bundle args = getArguments();
         int position = args.getInt(KEY_POSITION);
         View view;
-        if (position == MarketActivity.NUM_PAGES - 1) { // last fragment
+        if (position == MarketingActivity.NUM_PAGES - 1) { // last fragment
             view = inflater.inflate(R.layout.fragment_market_login, container, false);
             tvTextConnect = (MMTextView) view.findViewById(R.id.tvTextConnect);
             tvPhoneConnect = (MMTextView) view.findViewById(R.id.tvPhoneConnect);
+            final MMTextView tvInputSimCard = (MMTextView) view.findViewById(R.id.tvInputSimCard);
             etSimNum = (EditText) view.findViewById(R.id.etSimNum);
             btConnect = (MMButtonView) view.findViewById(R.id.btConnect);
             btConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Editable simNum = etSimNum.getEditableText();
-                    connector.connect(simNum.toString());
+                    String num = etSimNum.getEditableText().toString();
+                    if (num.equals("")) {
+                        tvInputSimCard.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+                    } else {
+                        tvInputSimCard.setTextColor(getActivity().getResources().getColor(android.R.color.white));
+                        etSimNum.setCursorVisible(false);
+                        btConnect.setClickable(false);
+                        connector.connect(num, connectorFlag);
+
+                    }
                 }
             });
 
@@ -138,7 +146,7 @@ public class MarketingFragments extends Fragment {
     }
 
     public interface Connector {
-        void connect(String simNum);
+        void connect(String simNum, int connectorFlag);
     }
 }
 
