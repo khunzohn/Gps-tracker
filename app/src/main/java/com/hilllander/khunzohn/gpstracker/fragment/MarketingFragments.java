@@ -1,7 +1,9 @@
 package com.hilllander.khunzohn.gpstracker.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,9 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hilllander.khunzohn.gpstracker.MarketingActivity;
 import com.hilllander.khunzohn.gpstracker.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mm.technomation.mmtext.MMButtonView;
 import mm.technomation.mmtext.MMTextView;
@@ -28,7 +34,10 @@ public class MarketingFragments extends Fragment {
     private int connectorFlag;
     private EditText etSimNum;
     private MMButtonView btConnect;
-    private Connector connector;
+    private ConnectorListener connectorListener;
+    private ProgressDialog pd;
+    private boolean connectionHasSucceeded = false;
+    private int checkCount;
 
     public MarketingFragments() {
 
@@ -45,16 +54,16 @@ public class MarketingFragments extends Fragment {
     @Override
     public void onAttach(Context context) {
         try {
-            connector = (Connector) context;
+            connectorListener = (ConnectorListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("MarketingActivity must implement Connector interface.");
+            throw new ClassCastException("MarketingActivity must implement ConnectorListener interface.");
         }
         super.onAttach(context);
     }
 
     @Override
     public void onDetach() {
-        connector = null;
+        connectorListener = null;
         super.onDetach();
     }
 
@@ -73,15 +82,39 @@ public class MarketingFragments extends Fragment {
             btConnect = (MMButtonView) view.findViewById(R.id.btConnect);
             btConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     String num = etSimNum.getEditableText().toString();
                     if (num.equals("")) {
                         tvInputSimCard.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
                     } else {
                         tvInputSimCard.setTextColor(getActivity().getResources().getColor(android.R.color.white));
-                        etSimNum.setCursorVisible(false);
-                        btConnect.setClickable(false);
-                        connector.connect(num, connectorFlag);
+                        v.setEnabled(false);
+                        etSimNum.setEnabled(false);
+                        connectorListener.connect(num, connectorFlag);
+
+                        final Handler errorDialogShower = new Handler();
+                        final Runnable show = new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Connection failed!", Toast.LENGTH_SHORT).show();
+                            }
+                        };
+                        final Timer connectionStatusChecker = new Timer("status checker", false);
+                        connectionStatusChecker.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                checkCount++;
+                                if (!connectionHasSucceeded && checkCount > 6) {
+                                    connectionStatusChecker.cancel();
+                                    errorDialogShower.post(show);
+                                } else if (connectionHasSucceeded) {
+                                    connectionStatusChecker.cancel();
+                                    connectorListener.onSucceeded();
+                                }
+                            }
+                        }, 5000, 5000); //check connection status for every 5 sec
+                        v.setEnabled(true);
+                        etSimNum.setEnabled(true);
 
                     }
                 }
@@ -145,8 +178,10 @@ public class MarketingFragments extends Fragment {
         }
     }
 
-    public interface Connector {
+    public interface ConnectorListener {
         void connect(String simNum, int connectorFlag);
+
+        void onSucceeded();
     }
 }
 

@@ -15,7 +15,7 @@ import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MarketingActivity extends AppCompatActivity implements MarketingFragments.Connector {
+public class MarketingActivity extends AppCompatActivity implements MarketingFragments.ConnectorListener {
 
     public static final int NUM_PAGES = 4;
     View selectedIndicator;
@@ -124,5 +124,10 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
                 break;
         }
         showProgressBar(true);
+    }
+
+    @Override
+    public void onSucceeded() {
+        showProgressBar(false);
     }
 }
