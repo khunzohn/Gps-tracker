@@ -10,11 +10,11 @@ import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
 public class GlobalApplication extends Application {
     private static USSDReciever.OnMessageRecieveListener currentListener;
 
-    public static void setCurrentListener(USSDReciever.OnMessageRecieveListener listener) {
-        currentListener = listener;
+    public static USSDReciever.OnMessageRecieveListener getCurrentMessageReceiveListener() {
+        return currentListener;
     }
 
-    public static USSDReciever.OnMessageRecieveListener getCurrentMessageListener() {
-        return currentListener;
+    public static void setCurrentMessageReceiveListener(USSDReciever.OnMessageRecieveListener listener) {
+        currentListener = listener;
     }
 }

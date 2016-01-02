@@ -20,6 +20,7 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
 
     public static final int NUM_PAGES = 4;
     public static final String KEY_SIM_NUMBER = "key for sim number";
+    public static final String KEY_CONNECTOR_FLAG = "key connector flag";
     private static final String TAG = Logger.generateTag(MarketingActivity.class);
     View selectedIndicator;
     private ViewPager pager;
@@ -120,16 +121,19 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
     }
 
     @Override
-    public void onConnectLater() {
+    public void onConnectLater(int connectorFlag) {
         Intent main = new Intent(MarketingActivity.this, MainActivity.class);
+        main.putExtra(KEY_SIM_NUMBER, "+8954623112");//TODO remove extra
+        main.putExtra(KEY_CONNECTOR_FLAG, connectorFlag);
         startActivity(main);
         finish();
     }
 
     @Override
-    public void onSucceeded(String simNum) {
+    public void onSucceeded(String simNum, int connectorFlag) {
         Intent main = new Intent(MarketingActivity.this, MainActivity.class);
         main.putExtra(KEY_SIM_NUMBER, simNum);
+        main.putExtra(KEY_CONNECTOR_FLAG, connectorFlag);
         startActivity(main);
         finish();
     }

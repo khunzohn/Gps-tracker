@@ -22,11 +22,13 @@ public class USSDReciever extends BroadcastReceiver {
     public static final int MESSAGE_TYPE_GEO_DATA = 115;
 
     private static final String TAG = Logger.generateTag(USSDReciever.class);
+    private static final String DATE = "Date";
+    private static final String TIME = "Time";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-            OnMessageRecieveListener onMessageRecieveListener = GlobalApplication.getCurrentMessageListener();
+            OnMessageRecieveListener onMessageRecieveListener = GlobalApplication.getCurrentMessageReceiveListener();
             if (null != onMessageRecieveListener) { // if message received during app closed ,it d be null
 
                 SmsMessage[] messages;
@@ -57,8 +59,9 @@ public class USSDReciever extends BroadcastReceiver {
                         switch (messageType) {
                             case MESSAGE_TYPE_GEO_DATA:
                                 String latLon[] = extractLatLon(smsBody);
+                                String dateTime[] = extractDateTime(smsBody);
                                 Logger.d(TAG, "Geo data message received");
-                                onMessageRecieveListener.onGeoDataReceived(latLon[0], latLon[1], sender);
+                                onMessageRecieveListener.onGeoDataReceived(latLon[0], latLon[1], dateTime[0], dateTime[1], sender);
                                 break;
                             case MESSAGE_TYPE_NO_ADMIN_OK:
                                 Logger.d(TAG, "no admin ok received!");
@@ -87,6 +90,26 @@ public class USSDReciever extends BroadcastReceiver {
 
         }
 
+    }
+
+    private String[] extractDateTime(String smsBody) {
+        String date = "";
+        String time = "";
+        //make sure smsBody starts with "http"
+        if (smsBody.startsWith("http")) {
+            String infos[] = smsBody.split(" ");
+
+            for (String rawInfo : infos) {
+                if (rawInfo.startsWith(DATE)) {
+                    date = rawInfo.substring(DATE.length());
+                }
+                if (rawInfo.startsWith(TIME)) {
+                    time = rawInfo.substring(TIME.length());
+                }
+            }
+
+        }
+        return new String[]{date, time};
     }
 
     private String[] extractLatLon(String smsBody) {
@@ -134,6 +157,6 @@ public class USSDReciever extends BroadcastReceiver {
 
         void onNoAdminOkReceived(String sender);
 
-        void onGeoDataReceived(String lat, String lon, String sender);
+        void onGeoDataReceived(String lat, String lon, String date, String time, String sender);
     }
 }

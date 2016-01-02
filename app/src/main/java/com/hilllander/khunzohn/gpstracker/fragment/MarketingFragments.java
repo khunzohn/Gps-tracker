@@ -59,7 +59,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        GlobalApplication.setCurrentListener(this);
+        GlobalApplication.setCurrentMessageReceiveListener(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -96,7 +96,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
             tvSkip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    connectorListener.onConnectLater();
+                    connectorListener.onConnectLater(connectorFlag);
                 }
             });
             btConnect = (MMButtonView) view.findViewById(R.id.btConnect);
@@ -132,7 +132,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
                                     errorDialogShower.post(show);
                                 } else if (connectionHasSucceeded) { //connection success
                                     connectionStatusChecker.cancel();
-                                    connectorListener.onSucceeded(num);
+                                    connectorListener.onSucceeded(num, connectorFlag);
                                 }
                             }
                         }, 3000, 3000); //check connection status for every 3 sec
@@ -189,7 +189,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
             public void onClick(View v) {
                 enableComponents(true);
                 errorDialog.dismiss();
-                connectorListener.onConnectLater();
+                connectorListener.onConnectLater(connectorFlag);
             }
         });
         retry.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +257,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
     }
 
     @Override
-    public void onGeoDataReceived(String lat, String lon, String sender) {
+    public void onGeoDataReceived(String lat, String lon, String sender, String date, String time) {
 
     }
 
@@ -268,9 +268,9 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
     public interface ConnectorListener {
         void connect(String simNum, int connectorFlag);
 
-        void onConnectLater();
+        void onConnectLater(int connectorFlag);//TODO remove connector flag paramater
 
-        void onSucceeded(String simNum);
+        void onSucceeded(String simNum, int connectorFlag);
     }
 }
 
