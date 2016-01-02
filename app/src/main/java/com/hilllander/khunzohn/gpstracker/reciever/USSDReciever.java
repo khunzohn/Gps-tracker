@@ -27,60 +27,64 @@ public class USSDReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
             OnMessageRecieveListener onMessageRecieveListener = GlobalApplication.getCurrentMessageListener();
-            SmsMessage[] messages;
-            String smsBody = "";
-            String sender = "";
-            Bundle bundle = intent.getExtras();
-            if (null != bundle) {
-                try {
-                    Object[] pdus = (Object[]) bundle.get("pdus");
-                    messages = new SmsMessage[pdus.length];
+            if (null != onMessageRecieveListener) { // if message received during app closed ,it d be null
 
-                    for (int i = 0; i < messages.length; i++) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            String format = bundle.getString("format");
-                            messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
-                        } else {
-                            messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                SmsMessage[] messages;
+                String smsBody = "";
+                String sender = "";
+                Bundle bundle = intent.getExtras();
+                if (null != bundle) {
+                    try {
+                        Object[] pdus = (Object[]) bundle.get("pdus");
+                        messages = new SmsMessage[pdus.length];
+
+                        for (int i = 0; i < messages.length; i++) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                String format = bundle.getString("format");
+                                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
+                            } else {
+                                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                            }
+                            sender = messages[i].getOriginatingAddress();
+                            smsBody = messages[i].getMessageBody();
                         }
-                        sender = messages[i].getOriginatingAddress();
-                        smsBody = messages[i].getMessageBody();
-                    }
-                } catch (Exception e) {
-                    Logger.e(TAG, e.getMessage());
+                    } catch (Exception e) {
+                        Logger.e(TAG, e.getMessage());
 
-                }
-                if (isRegisteredAddress(sender)) {
-                    int messageType = checkForMessageType(smsBody);
-                    switch (messageType) {
-                        case MESSAGE_TYPE_GEO_DATA:
-                            String latLon[] = extractLatLon(smsBody);
-                            Logger.d(TAG, "Geo data message received");
-                            onMessageRecieveListener.onGeoDataReceived(latLon[0], latLon[1], sender);
-                            break;
-                        case MESSAGE_TYPE_NO_ADMIN_OK:
-                            Logger.d(TAG, "no admin ok received!");
-                            onMessageRecieveListener.onNoAdminOkReceived(sender);
-                            break;
-                        case MESSAGE_TYPE_ADMIN_OK:
-                            Logger.d(TAG, "admin ok received!");
-                            onMessageRecieveListener.onAdminOkReceived(sender);
-                            break;
-                        case MESSAGE_TYPE_RESUME_OK:
-                            Logger.d(TAG, "resume ok received!");
-                            onMessageRecieveListener.onResumeOkReceived(sender);
-                            break;
-                        case MESSAGE_TYPE_BEGIN:
-                            Logger.d(TAG, "begin ok received!");
-                            onMessageRecieveListener.onBeginOkReceived(sender);
-                            break;
-                        case MESSAGE_TYPE_PASSWORD_OK:
-                            Logger.d(TAG, "password ok received!");
-                            onMessageRecieveListener.onPasswordOkReceived(sender);
-                            break;
+                    }
+                    if (isRegisteredAddress(sender)) {
+                        int messageType = checkForMessageType(smsBody);
+                        switch (messageType) {
+                            case MESSAGE_TYPE_GEO_DATA:
+                                String latLon[] = extractLatLon(smsBody);
+                                Logger.d(TAG, "Geo data message received");
+                                onMessageRecieveListener.onGeoDataReceived(latLon[0], latLon[1], sender);
+                                break;
+                            case MESSAGE_TYPE_NO_ADMIN_OK:
+                                Logger.d(TAG, "no admin ok received!");
+                                onMessageRecieveListener.onNoAdminOkReceived(sender);
+                                break;
+                            case MESSAGE_TYPE_ADMIN_OK:
+                                Logger.d(TAG, "admin ok received!");
+                                onMessageRecieveListener.onAdminOkReceived(sender);
+                                break;
+                            case MESSAGE_TYPE_RESUME_OK:
+                                Logger.d(TAG, "resume ok received!");
+                                onMessageRecieveListener.onResumeOkReceived(sender);
+                                break;
+                            case MESSAGE_TYPE_BEGIN:
+                                Logger.d(TAG, "begin ok received!");
+                                onMessageRecieveListener.onBeginOkReceived(sender);
+                                break;
+                            case MESSAGE_TYPE_PASSWORD_OK:
+                                Logger.d(TAG, "password ok received!");
+                                onMessageRecieveListener.onPasswordOkReceived(sender);
+                                break;
+                        }
                     }
                 }
             }
+
         }
 
     }

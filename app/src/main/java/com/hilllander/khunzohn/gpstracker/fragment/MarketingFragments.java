@@ -37,6 +37,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
     private MMTextView tvTextConnect;
     private MMTextView tvPhoneConnect;
     private EditText etSimNum;
+    private MMTextView tvSkip;
     private ConnectorListener connectorListener;
     private boolean connectionHasSucceeded = false;
     private int checkCount;
@@ -91,8 +92,8 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
             tvPhoneConnect = (MMTextView) view.findViewById(R.id.tvPhoneConnect);
             final MMTextView tvInputSimCard = (MMTextView) view.findViewById(R.id.tvInputSimCard);
             etSimNum = (EditText) view.findViewById(R.id.etSimNum);
-            MMTextView skip = (MMTextView) view.findViewById(R.id.skip);
-            skip.setOnClickListener(new View.OnClickListener() {
+            tvSkip = (MMTextView) view.findViewById(R.id.skip);
+            tvSkip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     connectorListener.onConnectLater();
@@ -108,8 +109,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
                     } else {
                         tvInputSimCard.setTextColor(getActivity().getResources().getColor(android.R.color.white));
                         showProgressBar(true);
-                        v.setEnabled(false);
-                        etSimNum.setEnabled(false);
+                        enableComponents(false);
                         connectorListener.connect(num, connectorFlag);
 
                         final Handler errorDialogShower = new Handler();
@@ -189,8 +189,7 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btConnect.setEnabled(true);
-                etSimNum.setEnabled(true);
+                enableComponents(true);
                 errorDialog.dismiss();
                 connectorListener.onConnectLater();
             }
@@ -198,12 +197,17 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btConnect.setEnabled(true);
-                etSimNum.setEnabled(true);
+                enableComponents(true);
                 errorDialog.dismiss();
             }
         });
         errorDialog.show(getActivity().getFragmentManager(), "error dialog");
+    }
+
+    private void enableComponents(boolean enable) {
+        btConnect.setEnabled(enable);
+        etSimNum.setEnabled(enable);
+        tvSkip.setEnabled(enable);
     }
 
     private void connectWith(int connFlag) {
