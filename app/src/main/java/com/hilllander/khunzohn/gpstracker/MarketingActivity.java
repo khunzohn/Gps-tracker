@@ -11,6 +11,7 @@ import com.hilllander.khunzohn.gpstracker.adapter.MarketingPagerAdapter;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
+import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,6 +29,7 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market);
+        ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         pager = (ViewPager) findViewById(R.id.pager);
         final View iZero = findViewById(R.id.indicatorZero);
         final View iOne = findViewById(R.id.indicatorOne);

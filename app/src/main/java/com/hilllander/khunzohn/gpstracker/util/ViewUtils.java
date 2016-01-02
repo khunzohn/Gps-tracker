@@ -1,5 +1,6 @@
 package com.hilllander.khunzohn.gpstracker.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.hilllander.khunzohn.gpstracker.R;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import mm.technomation.mmtext.MMTextView;
 
@@ -75,5 +77,11 @@ public class ViewUtils {
         else
             pbMessage.setMyanmarText(message);
         progressBarLayout.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public static void setStatusBarTint(Activity context, int resId) {
+        SystemBarTintManager sm = new SystemBarTintManager(context);
+        sm.setStatusBarTintEnabled(true);
+        sm.setStatusBarTintResource(resId);
     }
 }

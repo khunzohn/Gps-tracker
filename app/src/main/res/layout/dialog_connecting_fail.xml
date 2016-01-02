@@ -7,11 +7,23 @@
     <mm.technomation.mmtext.MMTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_title_connecting_failed" />
+        android:layout_gravity="center_horizontal"
+        android:text="@string/dialog_title_connecting_failed"
+        android:textColor="@color/colorAccent" />
+
+    <include layout="@layout/include_line" />
 
     <mm.technomation.mmtext.MMTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/text_view_padding"
+        android:text="@string/dialog_title_connecting_failed_reason"
+        android:textColor="@color/colorPrimary" />
+
+    <mm.technomation.mmtext.MMTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_view_padding"
         android:text="@string/dialog_reason_connecting_failed" />
 
     <LinearLayout

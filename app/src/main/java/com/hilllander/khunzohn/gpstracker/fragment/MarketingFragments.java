@@ -125,19 +125,17 @@ public class MarketingFragments extends Fragment implements USSDReciever.OnMessa
                             @Override
                             public void run() {
                                 checkCount++;
-                                if (!connectionHasSucceeded && checkCount > 6) {
+                                if (!connectionHasSucceeded && checkCount > 2) {
                                     //TODO increase checkCount for production
-                                    // connection not succeed till 30 sec(6*5000 = 30,000) then show error dialog
+                                    // connection not succeed till 30 sec(10*3000 = 30,000) then show error dialog
                                     connectionStatusChecker.cancel();
                                     errorDialogShower.post(show);
-                                } else if (!connectionHasSucceeded && checkCount > 2) { //connection success
-                                    //TODO re correct temp success algorithm
+                                } else if (connectionHasSucceeded) { //connection success
                                     connectionStatusChecker.cancel();
                                     connectorListener.onSucceeded(num);
                                 }
                             }
-                        }, 3000, 3000); //check connection status for every 5 sec
-                        //TODO replace with 5000 for production
+                        }, 3000, 3000); //check connection status for every 3 sec
                     }
                 }
             });

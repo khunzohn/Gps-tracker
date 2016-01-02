@@ -1,12 +1,13 @@
 package com.hilllander.khunzohn.gpstracker;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,9 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.appbar);
-//        ViewUtils.doKitkatStuffs(this,appbar);
-
+        ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
