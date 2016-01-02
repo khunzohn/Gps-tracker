@@ -1,9 +1,12 @@
 package com.hilllander.khunzohn.gpstracker.database.model;
 
 /**
- * Created by ubunphyu on 1/2/16.
+ *Created by khunzohn on 1/2/16.
  */
 public class Device {
+    public static final String DEFAULT_NAME = "not set";
+    public static final String DEFAULT_TYPE = "not set";
+    public static final String UN_AUTHORIZED = "un-authorized";
     private long id;
     private String deviceName;
     private String deviceType;

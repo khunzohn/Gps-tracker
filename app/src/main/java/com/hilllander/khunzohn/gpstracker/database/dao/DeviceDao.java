@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by khunzohn on 1/2/16.
+ *Created by khunzohn on 1/2/16.
  */
 public class DeviceDao {
     private static final String TAG = Logger.generateTag(DeviceDao.class);
@@ -42,7 +42,6 @@ public class DeviceDao {
     public Device createDevice(Device device) throws SQLException {
         long insertId = -1;
         ContentValues values = new ContentValues();
-        values.put(DeviceTable.COLUMN_ID, device.getId());
         values.put(DeviceTable.COLUMN_DEVICE_NAME, device.getDeviceName());
         values.put(DeviceTable.COLUMN_DEVICE_TYPE, device.getDeviceType());
         values.put(DeviceTable.COLUMN_SIM_NUMBER, device.getSimNumber());
@@ -72,7 +71,6 @@ public class DeviceDao {
     public Device updateDevice(Device device) throws SQLException {
         int rowUpdated = 0;
         ContentValues values = new ContentValues();
-        values.put(DeviceTable.COLUMN_ID, device.getId());
         values.put(DeviceTable.COLUMN_DEVICE_NAME, device.getDeviceName());
         values.put(DeviceTable.COLUMN_DEVICE_TYPE, device.getDeviceType());
         values.put(DeviceTable.COLUMN_SIM_NUMBER, device.getSimNumber());

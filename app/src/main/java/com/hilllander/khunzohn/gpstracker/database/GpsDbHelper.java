@@ -8,7 +8,7 @@ import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 
 /**
- * Created by khunzohn on 1/2/16.
+ *Created by khunzohn on 1/2/16.
  */
 public class GpsDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "devices.db";
