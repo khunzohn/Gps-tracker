@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.telephony.SmsManager;
 
 /**
- * Created by ubunphyu on 12/31/15.
+ *Created by khunzohn on 12/31/15.
  */
 public class USSD {
     private static final String SHARP = Uri.decode("#");

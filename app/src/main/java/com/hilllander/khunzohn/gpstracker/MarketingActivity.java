@@ -1,16 +1,16 @@
 package com.hilllander.khunzohn.gpstracker;
 
-import android.graphics.PorterDuff;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.hilllander.khunzohn.gpstracker.adapter.MarketingPagerAdapter;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
-import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
+import com.hilllander.khunzohn.gpstracker.util.Logger;
+import com.hilllander.khunzohn.gpstracker.util.USSD;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,21 +18,17 @@ import java.util.TimerTask;
 public class MarketingActivity extends AppCompatActivity implements MarketingFragments.ConnectorListener {
 
     public static final int NUM_PAGES = 4;
+    public static final String KEY_SIM_NUMBER = "key for sim number";
+    private static final String TAG = Logger.generateTag(MarketingActivity.class);
     View selectedIndicator;
     private ViewPager pager;
     private int currentItem = 0;
-    private ProgressBar progressBar;
-    private View progressBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market);
         pager = (ViewPager) findViewById(R.id.pager);
-        progressBarLayout = findViewById(R.id.progressBarLayout);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
-        showProgressBar(false);
         final View iZero = findViewById(R.id.indicatorZero);
         final View iOne = findViewById(R.id.indicatorOne);
         final View iTwo = findViewById(R.id.indicatorTwo);
@@ -51,6 +47,7 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
             public void onPageSelected(int position) {
                 currentItem = position;
                 if (null != selectedIndicator) {
+                    // unselect previous selected indicator and un highlight it by changing color to white
                     selectedIndicator.setSelected(false);
                 }
                 switch (position) {
@@ -69,7 +66,7 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
                     default:
                         selectedIndicator = iZero;
                 }
-
+                //make current indicator selected and highlight it by changing color
                 selectedIndicator.setSelected(true);
 
             }
@@ -95,14 +92,10 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
             public void run() {
                 swiper.post(swipe);
             }
-        }, 4000, 4000);
+        }, 4000, 4000); // swipe pager every 4 sec
 
     }
 
-    private void showProgressBar(boolean visible) {
-        String message = getString(R.string.dialog_message_connecting) + "...";
-        ViewUtils.showProgressBar(this, progressBarLayout, message, visible);
-    }
 
 
     @Override
@@ -112,22 +105,30 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
 
     @Override
     public void connect(String simNum, int connectorFlag) {
+        Logger.d(TAG, "connector flag" + connectorFlag);
         switch (connectorFlag) {
             case MarketingFragments.TEXT:
-//                USSD.smsBegin(simNum);
-//                showProgressBar(true);
-
+                USSD.smsBegin(simNum);
                 break;
             case MarketingFragments.PHONE:
-//                showProgressBar(false);
-
+                //TODO replace with phone call connecting
+                USSD.smsBegin(simNum);
                 break;
         }
-        showProgressBar(true);
     }
 
     @Override
-    public void onSucceeded() {
-        showProgressBar(false);
+    public void onConnectLater() {
+        Intent main = new Intent(MarketingActivity.this, MainActivity.class);
+        startActivity(main);
+        finish();
+    }
+
+    @Override
+    public void onSucceeded(String simNum) {
+        Intent main = new Intent(MarketingActivity.this, MainActivity.class);
+        main.putExtra(KEY_SIM_NUMBER, simNum);
+        startActivity(main);
+        finish();
     }
 }

@@ -10,4 +10,5 @@
     <dimen name="small_margin">4dp</dimen>
     <dimen name="instruction_label_padding">16dp</dimen>
     <dimen name="edit_text_padding">4dp</dimen>
+    <dimen name="label_skip_padding">16dp</dimen>
 </resources>

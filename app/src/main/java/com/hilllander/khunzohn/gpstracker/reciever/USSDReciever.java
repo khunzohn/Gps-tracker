@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
+import com.hilllander.khunzohn.gpstracker.GlobalApplication;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 
 /**
@@ -25,7 +26,7 @@ public class USSDReciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-            OnMessageRecieveListener onMessageRecieveListener = (OnMessageRecieveListener) context;
+            OnMessageRecieveListener onMessageRecieveListener = GlobalApplication.getCurrentMessageListener();
             SmsMessage[] messages;
             String smsBody = "";
             String sender = "";
@@ -54,21 +55,27 @@ public class USSDReciever extends BroadcastReceiver {
                     switch (messageType) {
                         case MESSAGE_TYPE_GEO_DATA:
                             String latLon[] = extractLatLon(smsBody);
+                            Logger.d(TAG, "Geo data message received");
                             onMessageRecieveListener.onGeoDataReceived(latLon[0], latLon[1], sender);
                             break;
                         case MESSAGE_TYPE_NO_ADMIN_OK:
+                            Logger.d(TAG, "no admin ok received!");
                             onMessageRecieveListener.onNoAdminOkReceived(sender);
                             break;
                         case MESSAGE_TYPE_ADMIN_OK:
+                            Logger.d(TAG, "admin ok received!");
                             onMessageRecieveListener.onAdminOkReceived(sender);
                             break;
                         case MESSAGE_TYPE_RESUME_OK:
+                            Logger.d(TAG, "resume ok received!");
                             onMessageRecieveListener.onResumeOkReceived(sender);
                             break;
                         case MESSAGE_TYPE_BEGIN:
+                            Logger.d(TAG, "begin ok received!");
                             onMessageRecieveListener.onBeginOkReceived(sender);
                             break;
                         case MESSAGE_TYPE_PASSWORD_OK:
+                            Logger.d(TAG, "password ok received!");
                             onMessageRecieveListener.onPasswordOkReceived(sender);
                             break;
                     }

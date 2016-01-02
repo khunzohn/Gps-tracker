@@ -56,4 +56,10 @@
     <string name="label_action_locate_gps">အခုဘယ်မှာလဲ</string>
     <string name="label_with_you">အသင်နှင့်</string>
     <string name="label_located_at_meters_away">မီတာ အကွာတွင်ရှိပါသည်</string>
+    <string name="button_later">ေနာက္မှ</string>
+    <!--//TODO replace with unicode-->
+    <string name="button_retry">ျပန္ျကိုးစားမယ္</string>
+    <!--//TODO replace with unicode-->
+    <string name="label_action_skip"><u>ေနာက္မှ >></u></string>
+    <!--//TODO replace with unicode-->
 </resources>

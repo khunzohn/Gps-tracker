@@ -1,6 +1,6 @@
 package com.hilllander.khunzohn.gpstracker.fragment;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.hilllander.khunzohn.gpstracker.GlobalApplication;
 import com.hilllander.khunzohn.gpstracker.MarketingActivity;
 import com.hilllander.khunzohn.gpstracker.R;
+import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
+import com.hilllander.khunzohn.gpstracker.util.Logger;
+import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,19 +29,20 @@ import mm.technomation.mmtext.MMTextView;
 /**
  *Created by khunzohn on 12/31/15.
  */
-public class MarketingFragments extends Fragment {
+public class MarketingFragments extends Fragment implements USSDReciever.OnMessageRecieveListener {
     public static final int TEXT = 10;
     public static final int PHONE = 11;
     private static final String KEY_POSITION = "key positoin";
+    private static final String TAG = Logger.generateTag(MarketingFragments.class);
     private MMTextView tvTextConnect;
     private MMTextView tvPhoneConnect;
-    private int connectorFlag;
     private EditText etSimNum;
-    private MMButtonView btConnect;
     private ConnectorListener connectorListener;
-    private ProgressDialog pd;
     private boolean connectionHasSucceeded = false;
     private int checkCount;
+    private int connectorFlag;
+    private MMButtonView btConnect;
+    private View progressBarLayout;
 
     public MarketingFragments() {
 
@@ -49,6 +54,12 @@ public class MarketingFragments extends Fragment {
         args.putInt(KEY_POSITION, position);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        GlobalApplication.setCurrentListener(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -72,22 +83,31 @@ public class MarketingFragments extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
         int position = args.getInt(KEY_POSITION);
-        View view;
+        final View view;
         if (position == MarketingActivity.NUM_PAGES - 1) { // last fragment
             view = inflater.inflate(R.layout.fragment_market_login, container, false);
+            progressBarLayout = view.findViewById(R.id.progressBarLayout);
             tvTextConnect = (MMTextView) view.findViewById(R.id.tvTextConnect);
             tvPhoneConnect = (MMTextView) view.findViewById(R.id.tvPhoneConnect);
             final MMTextView tvInputSimCard = (MMTextView) view.findViewById(R.id.tvInputSimCard);
             etSimNum = (EditText) view.findViewById(R.id.etSimNum);
+            MMTextView skip = (MMTextView) view.findViewById(R.id.skip);
+            skip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    connectorListener.onConnectLater();
+                }
+            });
             btConnect = (MMButtonView) view.findViewById(R.id.btConnect);
             btConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    String num = etSimNum.getEditableText().toString();
+                    final String num = etSimNum.getEditableText().toString();
                     if (num.equals("")) {
                         tvInputSimCard.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
                     } else {
                         tvInputSimCard.setTextColor(getActivity().getResources().getColor(android.R.color.white));
+                        showProgressBar(true);
                         v.setEnabled(false);
                         etSimNum.setEnabled(false);
                         connectorListener.connect(num, connectorFlag);
@@ -96,7 +116,8 @@ public class MarketingFragments extends Fragment {
                         final Runnable show = new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(), "Connection failed!", Toast.LENGTH_SHORT).show();
+                                showProgressBar(false);
+                                showErrorDialog();
                             }
                         };
                         final Timer connectionStatusChecker = new Timer("status checker", false);
@@ -105,17 +126,18 @@ public class MarketingFragments extends Fragment {
                             public void run() {
                                 checkCount++;
                                 if (!connectionHasSucceeded && checkCount > 6) {
+                                    //TODO increase checkCount for production
+                                    // connection not succeed till 30 sec(6*5000 = 30,000) then show error dialog
                                     connectionStatusChecker.cancel();
                                     errorDialogShower.post(show);
-                                } else if (connectionHasSucceeded) {
+                                } else if (!connectionHasSucceeded && checkCount > 2) { //connection success
+                                    //TODO re correct temp success algorithm
                                     connectionStatusChecker.cancel();
-                                    connectorListener.onSucceeded();
+                                    connectorListener.onSucceeded(num);
                                 }
                             }
-                        }, 5000, 5000); //check connection status for every 5 sec
-                        v.setEnabled(true);
-                        etSimNum.setEnabled(true);
-
+                        }, 3000, 3000); //check connection status for every 5 sec
+                        //TODO replace with 5000 for production
                     }
                 }
             });
@@ -156,9 +178,37 @@ public class MarketingFragments extends Fragment {
         return view;
     }
 
-    private void connectWith(int connectorFlag) {
+    private void showErrorDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setTitle("Connecting fail!");
+        dialog.setContentView(R.layout.dialog_connecting_fail);
+        MMButtonView later = (MMButtonView) dialog.findViewById(R.id.later);
+        MMButtonView retry = (MMButtonView) dialog.findViewById(R.id.retry);
+        final ErrorDialogFragment errorDialog = ErrorDialogFragment.newInstance(dialog);
+        errorDialog.setCancelable(false);
+        later.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btConnect.setEnabled(true);
+                etSimNum.setEnabled(true);
+                errorDialog.dismiss();
+                connectorListener.onConnectLater();
+            }
+        });
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btConnect.setEnabled(true);
+                etSimNum.setEnabled(true);
+                errorDialog.dismiss();
+            }
+        });
+        errorDialog.show(getActivity().getFragmentManager(), "error dialog");
+    }
+
+    private void connectWith(int connFlag) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        switch (connectorFlag) {
+        switch (connFlag) {
             case TEXT:
                 tvTextConnect.setSelected(true);
                 tvPhoneConnect.setSelected(false);
@@ -178,10 +228,47 @@ public class MarketingFragments extends Fragment {
         }
     }
 
+    @Override
+    public void onBeginOkReceived(String sender) {
+        Logger.d(TAG, "Begin ok from : " + sender);
+        connectionHasSucceeded = true;
+    }
+
+    @Override
+    public void onPasswordOkReceived(String sender) {
+
+    }
+
+    @Override
+    public void onResumeOkReceived(String sender) {
+
+    }
+
+    @Override
+    public void onAdminOkReceived(String sender) {
+
+    }
+
+    @Override
+    public void onNoAdminOkReceived(String sender) {
+
+    }
+
+    @Override
+    public void onGeoDataReceived(String lat, String lon, String sender) {
+
+    }
+
+    private void showProgressBar(final boolean visible) {
+        final String message = getActivity().getString(R.string.dialog_message_connecting);
+        ViewUtils.showProgressBar(getActivity(), progressBarLayout, message, visible);
+    }
     public interface ConnectorListener {
         void connect(String simNum, int connectorFlag);
 
-        void onSucceeded();
+        void onConnectLater();
+
+        void onSucceeded(String simNum);
     }
 }
 

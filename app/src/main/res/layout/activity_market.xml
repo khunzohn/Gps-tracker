@@ -35,6 +35,5 @@
             layout="@layout/include_circle" />
     </LinearLayout>
 
-    <include layout="@layout/include_progress" />
 
 </FrameLayout>

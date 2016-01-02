@@ -78,10 +78,23 @@
         android:text="@string/button_connect"
         android:textColor="@android:color/white" />
 
+    <mm.technomation.mmtext.MMTextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btConnect"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:paddingTop="@dimen/label_skip_padding"
+        android:text="@string/label_action_skip"
+        android:textColor="@color/label_skip_color_selector" />
+
     <FrameLayout
         android:id="@+id/warningContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
+
+    <include layout="@layout/include_progress" />
 
 </RelativeLayout>
