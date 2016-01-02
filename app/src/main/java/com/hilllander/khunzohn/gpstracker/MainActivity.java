@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
     private float longitude;
     private String trackedDevice, lastTrackedTime, lastTrackedDate;
     private List<Device> trackedDevices;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
         ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         GlobalApplication.setCurrentMessageReceiveListener(this);
         trackedDevices = new ArrayList<>();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
             int connectorFlag = bundle.getInt(MarketingActivity.KEY_CONNECTOR_FLAG);
 //            USSD.queryGeo(simNum, USSD.DEAFULT_PASSWORD, connectorFlag);
             if (MarketingFragments.TEXT == connectorFlag) {
+                fab.setEnabled(false);
                 String message = getString(R.string.dialog_message_fetching_geo);
                 ViewUtils.showProgressBar(this, progressBarLayout, message, true);
                 final Handler errorDialogShower = new Handler();
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
                     public void run() {
                         showErrorDialog();
                         ViewUtils.showProgressBar(MainActivity.this, progressBarLayout, false);
+                        fab.setEnabled(true);
                     }
                 };
                 final Timer connectionStatusChecker = new Timer("connection status checker", false);
