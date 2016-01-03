@@ -22,7 +22,7 @@ import mm.technomation.mmtext.MMTextView;
 /**
  *Created by khunzohn on 1/2/16.
  */
-public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder> {
+public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = Logger.generateTag(MainRecyclerAdapter.class);
     private List<Device> devices;
     private Context context;
@@ -30,7 +30,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     public MainRecyclerAdapter(Context context) {
         this.context = context;
-        onClickListener = (OnDeviceOnClickListener) context;
         devices = new ArrayList<>();
         Logger.d(TAG, "contructor triggered");
     }
@@ -43,56 +42,60 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         notifyDataSetChanged();
     }
 
-    @Override
-    public MainRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gps_device, parent, false);
-        Logger.d(TAG, "onCreateViewHolder triggered");
-        return new ViewHolder(view);
+    public void setOnClickListener(OnDeviceOnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
-    public void onBindViewHolder(MainRecyclerAdapter.ViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gps_device, parent, false);
+        Logger.d(TAG, "onCreateViewHolder triggered");
+        return new MainRecyclerViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Device device = devices.get(position);
         Logger.logDevice(TAG, device);
-        holder.deviceName.setMyanmarText(device.getDeviceName());
-        holder.simNumber.setText(device.getSimNumber());
+        ((MainRecyclerViewHolder) holder).deviceName.setMyanmarText(device.getDeviceName());
+        ((MainRecyclerViewHolder) holder).simNumber.setText(device.getSimNumber());
         if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
-            holder.ibLock.setBackgroundResource(R.drawable.ic_lock_open_white_24dp);
+            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_open_white_24dp);
         } else {
-            holder.ibLock.setBackgroundResource(R.drawable.ic_lock_white_24dp);
+            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_white_24dp);
         }
         if (device.getAuthorization().equals(Device.AUTHORIZED)) {
-            holder.authorization.setMyanmarText(context.getString(R.string.label_toggle_action_authorized));
+            ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_authorized));
         } else {
-            holder.authorization.setMyanmarText(context.getString(R.string.label_toggle_action_un_authorized));
+            ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_un_authorized));
         }
-        holder.tvLatValue.setText(String.valueOf(device.getLatitude()));
-        holder.tvLongValue.setText(String.valueOf(device.getLongitude()));
+        ((MainRecyclerViewHolder) holder).tvLatValue.setText(String.valueOf(device.getLatitude()));
+        ((MainRecyclerViewHolder) holder).tvLongValue.setText(String.valueOf(device.getLongitude()));
         String dateTime = device.getTrackedDate() + " " + device.getTrackedTime();
-        holder.tvDateTime.setText(dateTime);
+        ((MainRecyclerViewHolder) holder).tvDateTime.setText(dateTime);
             /*edit onclick*/
-        holder.ibEdit.setOnClickListener(new View.OnClickListener() {
+        ((MainRecyclerViewHolder) holder).ibEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClickEdit(device);
             }
         });
             /*lock onclick*/
-        holder.ibLock.setOnClickListener(new View.OnClickListener() {
+        ((MainRecyclerViewHolder) holder).ibLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClickLock(device);
             }
         });
             /*go to map onclick*/
-        holder.tvGoToMap.setOnClickListener(new View.OnClickListener() {
+        ((MainRecyclerViewHolder) holder).tvGoToMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClickGoToMap(device);
             }
         });
             /*profile pic onclick*/
-        holder.deviceProfile.setOnClickListener(new View.OnClickListener() {
+        ((MainRecyclerViewHolder) holder).deviceProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClickProfile(device);
@@ -116,13 +119,13 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         void onClickGoToMap(Device device);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView deviceProfile;
-        MMTextView deviceName, authorization, tvGoToMap;
-        TextView simNumber, tvLatValue, tvLongValue, tvDateTime;
-        ImageButton ibLock, ibEdit;
+    class MainRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private ImageView deviceProfile;
+        private MMTextView deviceName, authorization, tvGoToMap;
+        private TextView simNumber, tvLatValue, tvLongValue, tvDateTime;
+        private ImageButton ibLock, ibEdit;
 
-        public ViewHolder(View v) {
+        public MainRecyclerViewHolder(View v) {
             super(v);
             Logger.d(TAG, "ViewHolder constructor triggered ");
             deviceProfile = (ImageView) v.findViewById(R.id.deviceProfile);

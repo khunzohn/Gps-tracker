@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MainRecyclerAdapter(this);
+        adapter.setOnClickListener(this);
         recyclerView.setAdapter(adapter);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -309,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
                 Logger.e(TAG, e.getLocalizedMessage());
             }
             adapter.setDevices(devices);
+            adapter.setOnClickListener(MainActivity.this);
             Logger.d(TAG, "Tracked devices size : " + devices.size());
         }
     }
