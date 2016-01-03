@@ -65,6 +65,7 @@ public class DeviceDao {
         if (insertId > 0) {
             createdDevice = getDeviceById(String.valueOf(insertId));
         }
+        Logger.d(TAG, "InsertId : " + insertId + "CreatedDevice : " + String.valueOf(createdDevice));
         return createdDevice;
     }
 

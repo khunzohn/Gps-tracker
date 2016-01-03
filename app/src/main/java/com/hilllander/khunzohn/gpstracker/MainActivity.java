@@ -12,7 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.hilllander.khunzohn.gpstracker.adapter.MainRecyclerAdapter;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
@@ -29,16 +32,23 @@ import java.util.TimerTask;
 
 import mm.technomation.mmtext.MMButtonView;
 
-public class MainActivity extends AppCompatActivity implements USSDReciever.OnMessageRecieveListener {
+public class MainActivity extends AppCompatActivity implements USSDReciever.OnMessageRecieveListener,
+        MainRecyclerAdapter.OnDeviceOnClickListener {
     private static final String TAG = Logger.generateTag(MainActivity.class);
     private int checkCount = 0;
     private boolean geoDataFetched = false;
     private float latitude;
     private float longitude;
     private String trackedDevice, lastTrackedTime, lastTrackedDate;
-    private List<Device> trackedDevices;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
+    private View progressBarLayout;
+    private MainRecyclerAdapter adapter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +57,14 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        final View progressBarLayout = findViewById(R.id.progressBarLayout);
+        progressBarLayout = findViewById(R.id.progressBarLayout);
         ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         GlobalApplication.setCurrentMessageReceiveListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
-        trackedDevices = new ArrayList<>();
+        adapter = new MainRecyclerAdapter(this);
+        recyclerView.setAdapter(adapter);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,22 +73,22 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
                         .setAction("Action", null).show();
             }
         });
-        //activity started from MarketingActivity's connecting succeeded
         Bundle bundle = getIntent().getExtras();
+        //activity started from MarketingActivity's connecting succeeded
         if (null != bundle) {
-            String simNum = bundle.getString(MarketingActivity.KEY_SIM_NUMBER);
-            int connectorFlag = bundle.getInt(MarketingActivity.KEY_CONNECTOR_FLAG);
-//            USSD.queryGeo(simNum, USSD.DEAFULT_PASSWORD, connectorFlag);
+            final String simNum = bundle.getString(MarketingActivity.KEY_SIM_NUMBER);
+            final int connectorFlag = bundle.getInt(MarketingActivity.KEY_CONNECTOR_FLAG);
+
             if (MarketingFragments.TEXT == connectorFlag) {
                 fab.setEnabled(false);
-                String message = getString(R.string.dialog_message_fetching_geo);
-                ViewUtils.showProgressBar(this, progressBarLayout, message, true);
+
+                showProgressBar(true);
                 final Handler errorDialogShower = new Handler();
                 final Runnable show = new Runnable() {
                     @Override
                     public void run() {
                         showErrorDialog();
-                        ViewUtils.showProgressBar(MainActivity.this, progressBarLayout, false);
+                        showProgressBar(false);
                         fab.setEnabled(true);
                     }
                 };
@@ -87,11 +97,17 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
                     @Override
                     public void run() {
                         checkCount++;
-                        if (checkCount > 2 && !geoDataFetched) {
+                        if (checkCount == 2) {
+                            USSD.queryGeo(simNum, USSD.DEAFULT_PASSWORD, MarketingFragments.TEXT);
+                            Logger.d(TAG, "Query sent");
+                        }
+                        if (checkCount > 10 && !geoDataFetched) {
                             errorDialogShower.post(show);
                             connectionStatusChecker.cancel();
+                            Logger.d(TAG, "geo fetching failed");
                         } else if (geoDataFetched) {
-
+                            connectionStatusChecker.cancel();
+                            Logger.d(TAG, "geo fetching succeeded");
                         }
                     }
                 }, 3000, 3000);//checker connection status every 3 sec
@@ -99,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
             }
 
         }
+        FetchDevicesFromDb fetcher = new FetchDevicesFromDb(this);
+        fetcher.execute();
     }
 
     private void showErrorDialog() {
@@ -144,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
 
     @Override
     public void onGeoDataReceived(String lat, String lon, String date, String time, String sender) {
+        Logger.d(TAG, "lat : " + lat + " lon : " + lon + " date : " + date + " time : " + time + " sender : " + sender);
         if (!lat.equals("0") && !lon.equals("0") && !date.equals("") && !time.equals("")) {
             latitude = Float.parseFloat(lat);
             longitude = Float.parseFloat(lon);
@@ -164,10 +183,39 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
             createDevice.execute(device);
 
         } else {
-
+            makeToast("empty geo received!");
         }
     }
 
+    @Override
+    public void onClickEdit(Device device) {
+        makeToast("Edit : " + device.getDeviceName());
+    }
+
+    @Override
+    public void onClickLock(Device device) {
+        makeToast("lock : " + device.getDeviceName());
+    }
+
+    @Override
+    public void onClickProfile(Device device) {
+        makeToast("profile : " + device.getDeviceName());
+    }
+
+    @Override
+    public void onClickGoToMap(Device device) {
+        makeToast("go to map : " + device.getDeviceName());
+    }
+
+    private void makeToast(String message) {
+        if (BuildConfig.DEBUG)
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean visible) {
+        final String message = getString(R.string.dialog_message_fetching_geo);
+        ViewUtils.showProgressBar(this, progressBarLayout, message, visible);
+    }
 
     private class CreateDeviceAsync extends AsyncTask<Device, Void, Device> {
         private DeviceDao dao;
@@ -180,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
         protected void onPreExecute() {
             try {
                 dao.open();
+                Logger.d(TAG, "dao opened");
             } catch (SQLException e) {
                 Logger.e(TAG, e.getLocalizedMessage());
             }
@@ -196,21 +245,71 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
                     Logger.e(TAG, e.getLocalizedMessage());
                 }
             }
+            Logger.d(TAG, "created evice : " + String.valueOf(createdDevice));
             return createdDevice;
         }
 
         @Override
-        protected void onPostExecute(Device device) {
+        protected void onPostExecute(Device createdDevice) {
             try {
                 dao.close();
+                Logger.d(TAG, "dao closed");
             } catch (SQLException e) {
                 Logger.e(TAG, e.getLocalizedMessage());
             }
-            if (null != device) {
+            if (null != createdDevice) {
+                List<Device> trackedDevices = new ArrayList<>();
+                trackedDevices.add(createdDevice);
                 geoDataFetched = true;
-                trackedDevices.add(device);
+                adapter.setDevices(trackedDevices);
+                showProgressBar(false);
             }
 
+        }
+    }
+
+    private class FetchDevicesFromDb extends AsyncTask<Void, Void, List<Device>> {
+        private DeviceDao dao;
+
+        public FetchDevicesFromDb(Context context) {
+            dao = new DeviceDao(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                showProgressBar(true);
+                dao.open();
+                Logger.d(TAG, "dao open");
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+                showProgressBar(false);
+            }
+        }
+
+        @Override
+        protected List<Device> doInBackground(Void... params) {
+            List<Device> devices = new ArrayList<>();
+            try {
+                devices = dao.getAllDevices();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            Logger.d(TAG, "devices size : " + devices.size());
+            showProgressBar(false);
+            return devices;
+        }
+
+        @Override
+        protected void onPostExecute(List<Device> devices) {
+            try {
+                dao.close();
+                Logger.d(TAG, "dao closed");
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            adapter.setDevices(devices);
+            Logger.d(TAG, "Tracked devices size : " + devices.size());
         }
     }
 }

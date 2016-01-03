@@ -7,6 +7,7 @@ public class Device {
     public static final String DEFAULT_NAME = "not set";
     public static final String DEFAULT_TYPE = "not set";
     public static final String UN_AUTHORIZED = "un-authorized";
+    public static final String AUTHORIZED = "authorized";
     private long id;
     private String deviceName;
     private String deviceType;

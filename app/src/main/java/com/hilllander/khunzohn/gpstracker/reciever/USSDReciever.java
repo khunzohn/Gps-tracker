@@ -22,8 +22,8 @@ public class USSDReciever extends BroadcastReceiver {
     public static final int MESSAGE_TYPE_GEO_DATA = 115;
 
     private static final String TAG = Logger.generateTag(USSDReciever.class);
-    private static final String DATE = "Date";
-    private static final String TIME = "Time";
+    private static final String DATE = "Date:";
+    private static final String TIME = "Time:";
 
     @Override
     public void onReceive(Context context, Intent intent) {

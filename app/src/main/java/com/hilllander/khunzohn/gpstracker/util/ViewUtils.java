@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.hilllander.khunzohn.gpstracker.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -83,5 +85,16 @@ public class ViewUtils {
         SystemBarTintManager sm = new SystemBarTintManager(context);
         sm.setStatusBarTintEnabled(true);
         sm.setStatusBarTintResource(resId);
+    }
+
+    public static void makeToast(final Context context, final String message) {
+        //TODO delete it for production
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

@@ -123,8 +123,6 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
     @Override
     public void onConnectLater(int connectorFlag) {
         Intent main = new Intent(MarketingActivity.this, MainActivity.class);
-        main.putExtra(KEY_SIM_NUMBER, "+8954623112");//TODO remove extra
-        main.putExtra(KEY_CONNECTOR_FLAG, connectorFlag);
         startActivity(main);
         finish();
     }
