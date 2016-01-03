@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
     private String trackedDevice, lastTrackedTime, lastTrackedDate;
     private List<Device> trackedDevices;
     private FloatingActionButton fab;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements USSDReciever.OnMe
         final View progressBarLayout = findViewById(R.id.progressBarLayout);
         ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         GlobalApplication.setCurrentMessageReceiveListener(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
         trackedDevices = new ArrayList<>();
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

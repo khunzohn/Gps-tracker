@@ -13,4 +13,6 @@
     <dimen name="label_skip_padding">16dp</dimen>
     <dimen name="line_margin">4dp</dimen>
     <dimen name="text_view_padding">6dp</dimen>
+    <dimen name="large_text">18sp</dimen>
+    <dimen name="image_button_size">25dp</dimen>
 </resources>
