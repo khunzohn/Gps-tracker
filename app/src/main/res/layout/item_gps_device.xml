@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue_700">
+        android:background="@color/blue_300">
 
         <ImageView
             android:id="@+id/deviceProfile"
@@ -22,6 +22,7 @@
             android:layout_height="@dimen/circle_image_size"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:contentDescription="@string/profile_image_content_description"
             android:padding="@dimen/text_view_padding"
             android:src="@drawable/default_device_profile_pic" />
 
@@ -45,7 +46,6 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/deviceProfile"
             android:layout_toRightOf="@+id/deviceProfile"
-            android:paddingTop="@dimen/text_view_padding"
             android:textColor="@android:color/white"
             android:textSize="@dimen/small_text"
             tools:text="+90865889765" />
@@ -57,7 +57,6 @@
             android:layout_below="@+id/simNumber"
             android:layout_marginLeft="@dimen/circle_image_size"
             android:layout_marginStart="@dimen/circle_image_size"
-            android:paddingTop="@dimen/text_view_padding"
             android:textColor="@color/red_200"
             android:textSize="@dimen/small_text"
             tools:text="un-authorization" />
@@ -67,16 +66,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/deviceProfile"
-            android:layout_margin="@dimen/text_view_padding"
             android:contentDescription="@string/image_place_content_description"
+            android:padding="@dimen/text_view_padding"
             android:src="@drawable/ic_place_white_24dp" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/tvPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iPlace"
+            android:layout_toEndOf="@+id/iPlace"
+            android:layout_toRightOf="@+id/iPlace"
+            android:padding="@dimen/text_view_padding"
+            android:text="@string/label_gps_place"
+            android:textColor="@android:color/white" />
 
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iPlace">
+            android:layout_below="@+id/iPlace"
+            android:layout_marginLeft="@dimen/text_view_padding"
+            android:layout_marginStart="@dimen/text_view_padding"
+            android:layout_marginTop="@dimen/text_view_padding">
             <mm.technomation.mmtext.MMTextView
                 android:id="@+id/tvLatitude"
                 android:layout_width="wrap_content"
@@ -84,21 +97,23 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:padding="@dimen/text_view_padding"
+                android:gravity="center"
                 android:text="@string/label_gps_latitude"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/normal_text" />
+                android:textSize="@dimen/small_text" />
 
             <TextView
                 android:id="@+id/tvLatValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvLongValue"
                 android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/tvLongValue"
+                android:layout_alignTop="@+id/tvLatitude"
                 android:layout_toEndOf="@id/tvLatitude"
                 android:layout_toRightOf="@+id/tvLatitude"
-                android:padding="@dimen/text_view_padding"
                 android:textColor="@color/red_200"
-                android:textSize="@dimen/normal_text"
+                android:textSize="@dimen/small_text"
                 tools:text="45.12334" />
             <mm.technomation.mmtext.MMTextView
                 android:id="@+id/tvLongitude"
@@ -107,34 +122,26 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvLatitude"
-                android:padding="@dimen/text_view_padding"
                 android:text="@string/label_gps_longitude"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/normal_text" />
+                android:textSize="@dimen/small_text" />
 
             <TextView
                 android:id="@+id/tvLongValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tvLongitude"
                 android:layout_below="@+id/tvLatValue"
+                android:layout_marginLeft="@dimen/text_view_padding"
+                android:layout_marginStart="@dimen/text_view_padding"
                 android:layout_toEndOf="@id/tvLongitude"
                 android:layout_toRightOf="@+id/tvLongitude"
-                android:padding="@dimen/text_view_padding"
                 android:textColor="@color/red_200"
-                android:textSize="@dimen/normal_text"
+                android:textSize="@dimen/small_text"
                 tools:text="45.12334" />
         </RelativeLayout>
 
-        <mm.technomation.mmtext.MMTextView
-            android:id="@+id/tvPlace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/iPlace"
-            android:layout_toEndOf="@+id/ibLock"
-            android:layout_toRightOf="@+id/ibLock"
-            android:padding="@dimen/text_view_padding"
-            android:text="@string/label_gps_place"
-            android:textColor="@android:color/white" />
+
 
         <ImageButton
             android:id="@+id/ibLock"
@@ -196,12 +203,12 @@
             android:id="@+id/tvDateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tvGoToMap"
-            android:layout_alignStart="@+id/tvGoToMap"
             android:layout_alignTop="@+id/relativeLayout"
+            android:layout_toEndOf="@+id/iClock"
+            android:layout_toRightOf="@+id/iClock"
             android:padding="@dimen/text_view_padding"
             android:textColor="@color/pink_200"
-            android:textSize="@dimen/normal_text"
+            android:textSize="@dimen/small_text"
             tools:text="12/02/16 11:32:13" />
 
 

@@ -158,4 +158,5 @@
     <string name="edit_image_button_content_description">edit device detail</string>
     <string name="image_place_content_description">image showing place</string>
     <string name="image_clock_content_description">image showing last tracked time</string>
+    <string name="profile_image_content_description">device\'s profile picture</string>
 </resources>

@@ -14,10 +14,10 @@
     <dimen name="line_margin">4dp</dimen>
     <dimen name="text_view_padding">6dp</dimen>
     <dimen name="large_text">18sp</dimen>
-    <dimen name="image_button_size">30dp</dimen>
+    <dimen name="image_button_size">20dp</dimen>
     <dimen name="cardview_radius">4dp</dimen>
     <dimen name="cardview_margin">16dp</dimen>
     <dimen name="circle_image_size">64dp</dimen>
-    <dimen name="small_text">8sp</dimen>
+    <dimen name="small_text">10sp</dimen>
     <dimen name="normal_text">12sp</dimen>
 </resources>
