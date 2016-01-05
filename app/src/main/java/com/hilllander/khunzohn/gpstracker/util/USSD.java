@@ -3,7 +3,6 @@ package com.hilllander.khunzohn.gpstracker.util;
 import android.net.Uri;
 import android.telephony.SmsManager;
 
-import com.hilllander.khunzohn.gpstracker.BuildConfig;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 
 /**
@@ -45,12 +44,8 @@ public class USSD {
     }
 
     public static void queryGeo(String desAddress, String password, int connectorFlag) {
-        if (BuildConfig.DEBUG) {
-            String message = "http://maps.google.com/maps?q=N20.803602,E97.033195 Speed:0.0km/h Time:04:09:38 " +
-                    "Date:15/12/24 IMEI:355488020168147";
-            sm.sendTextMessage(DEBUG_ADDRESS, null, message, null, null);
-        } else {
-            switch (connectorFlag) {
+
+        switch (connectorFlag) {
                 case MarketingFragments.PHONE:
                     //TODO implement phone query
                     break;
@@ -59,7 +54,7 @@ public class USSD {
                     sm.sendTextMessage(desAddress, null, message, null, null);
                     break;
             }
-        }
+
 
     }
 

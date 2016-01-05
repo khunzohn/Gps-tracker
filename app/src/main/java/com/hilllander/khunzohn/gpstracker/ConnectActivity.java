@@ -1,17 +1,23 @@
 package com.hilllander.khunzohn.gpstracker;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ErrorDialogFragment;
+import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
+import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.fragment.ConnectionWarningFragment;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
@@ -19,6 +25,7 @@ import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,11 +36,10 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     public static final int TEXT = 10;
     public static final int PHONE = 11;
     public static final String KEY_UP_ENABLE = "key for up enable";
+    public static final String KEY_DEVICE_EXTRA = "key for device extra";
     private static final long CHECK_PERIOD = 3000;
-    private static final int MAX_CHECK_OUT = 20; //20*3000 1 min
+    private static final int MAX_CHECK_OUT = 30; //20*3000 1 min
     private static final String TAG = Logger.generateTag(ConnectActivity.class);
-    private static final String KEY_SIM_NUMBER = "key sim number";
-    private static final String KEY_CONNECTOR_FLAG = "key for connector flag";
     private MMTextView tvTextConnect;
     private MMTextView tvPhoneConnect;
     private EditText etSimNum;
@@ -43,6 +49,8 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     private int connectorFlag;
     private MMButtonView btConnect;
     private View progressBarLayout;
+    private Device createdDevice;
+    private boolean firstAppLaunch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
             boolean upEnable = bundle.getBoolean(KEY_UP_ENABLE, false);
+            firstAppLaunch = bundle.getBoolean(MarketingActivity.KEY_FIRST_APP_LAUNCH, false);
             ActionBar actionBar = getSupportActionBar();
             if (null != actionBar) {
                 actionBar.setDisplayHomeAsUpEnabled(upEnable);
@@ -85,31 +94,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
                     showProgressBar(true);
                     enableComponents(false);
                     connect(num, connectorFlag);
-
-                    final Handler errorDialogShower = new Handler();
-                    final Runnable show = new Runnable() {
-                        @Override
-                        public void run() {
-                            showProgressBar(false);
-                            showErrorDialog();
-                        }
-                    };
-                    final Timer connectionStatusChecker = new Timer("status checker", false);
-                    connectionStatusChecker.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            checkCount++;
-                            if (!connectionHasSucceeded && checkCount > MAX_CHECK_OUT) {
-                                //TODO increase checkCount for production
-                                // connection not succeed till 60 sec(20*3000 = 30,000) then show error dialog
-                                connectionStatusChecker.cancel();
-                                errorDialogShower.post(show);
-                            } else if (connectionHasSucceeded) { //connection success
-                                connectionStatusChecker.cancel();
-                                onSucceeded(num, connectorFlag);
-                            }
-                        }
-                    }, CHECK_PERIOD, CHECK_PERIOD); //check connection status for every 3 sec
                 }
             }
         });
@@ -132,31 +116,93 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         });
     }
 
-    private void onSucceeded(String num, int connectorFlag) {
-        Intent main = new Intent(ConnectActivity.this, MainActivity.class);
-        main.putExtra(KEY_SIM_NUMBER, num);
-        main.putExtra(KEY_CONNECTOR_FLAG, connectorFlag);
-        startActivity(main);
-        finish();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (firstAppLaunch) {
+            // disable back pressed
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void onSucceeded(Device device) {
+        if (firstAppLaunch) {
+            Intent main = new Intent(ConnectActivity.this, MainActivity.class);
+            main.putExtra(KEY_DEVICE_EXTRA, device);
+            startActivity(main);
+            finish();
+        } else {
+            Intent returnedIntent = new Intent();
+            returnedIntent.putExtra(KEY_DEVICE_EXTRA, device);
+            setResult(RESULT_OK, returnedIntent);
+            finish();
+        }
     }
 
     private void connect(String num, int connectorFlag) {
         Logger.d(TAG, "connector flag" + connectorFlag);
-        switch (connectorFlag) {
-            case MarketingFragments.TEXT:
-                USSD.smsBegin(num);
-                break;
-            case MarketingFragments.PHONE:
-                //TODO replace with phone call connecting
-                USSD.smsBegin(num);
-                break;
+        if (firstAppLaunch) {
+            switch (connectorFlag) {
+                case MarketingFragments.TEXT:
+                    USSD.smsBegin(num);
+                    Logger.d(TAG, "begin sent!");
+                    break;
+                case MarketingFragments.PHONE:
+                    //TODO replace with phone call connecting
+                    USSD.smsBegin(num);
+                    Logger.d(TAG, "begin sent!");
+                    break;
+            }
+        } else {
+            USSD.queryGeo(num, USSD.DEAFULT_PASSWORD, connectorFlag);
+            Logger.d(TAG, "query geo sent!");
         }
+        final Handler errorDialogShower = new Handler();
+        final Runnable show = new Runnable() {
+            @Override
+            public void run() {
+                showProgressBar(false);
+                showErrorDialog();
+            }
+        };
+        final Timer connectionStatusChecker = new Timer("status checker", false);
+        connectionStatusChecker.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                checkCount++;
+                if (!connectionHasSucceeded && checkCount > MAX_CHECK_OUT) {
+                    // connection not succeed till 60 sec(20*3000 = 30,000) then show error dialog
+                    connectionStatusChecker.cancel();
+                    checkCount = 0;
+                    errorDialogShower.post(show);
+                } else if (connectionHasSucceeded) { //connection success
+                    connectionStatusChecker.cancel();
+                    checkCount = 0;
+                    onSucceeded(createdDevice);
+                }
+            }
+        }, CHECK_PERIOD, CHECK_PERIOD); //check connection status for every 3 sec
     }
 
     private void connectLater() {
-        Intent main = new Intent(ConnectActivity.this, MainActivity.class);
-        startActivity(main);
-        finish();
+        if (firstAppLaunch) {
+            Intent main = new Intent(ConnectActivity.this, MainActivity.class);
+            startActivity(main);
+            finish();
+        } else {
+            finish();
+        }
+
+
     }
 
     private void connectWith(int connFlag) {
@@ -220,7 +266,8 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
 
     @Override
     public void onBeginOkReceived(String sender) {
-
+        Logger.d(TAG, "begin ok received");
+        USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD, connectorFlag);
     }
 
     @Override
@@ -245,6 +292,79 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
 
     @Override
     public void onGeoDataReceived(String lat, String lon, String date, String time, String sender) {
+        Logger.d(TAG, "lat: " + lat + " lon : " + lon + " date : " + date + " time : " + time + " sender : " + sender);
+        if (!lat.equals("0") && !lon.equals("0") && !date.equals("") && !time.equals("")) {
+            float latitude = Float.parseFloat(lat);
+            float longitude = Float.parseFloat(lon);
+            Device device = new Device();
+            device.setLatitude(latitude);
+            device.setLongitude(longitude);
+            device.setTrackedTime(date);
+            device.setTrackedDate(time);
+            device.setSimNumber(sender);
+            device.setDeviceName(Device.DEFAULT_NAME);
+            device.setDeviceType(Device.DEFAULT_TYPE);
+            device.setPassword(USSD.DEAFULT_PASSWORD);
+            device.setAuthorization(Device.UN_AUTHORIZED);
+            CreateDeviceAsync createDevice = new CreateDeviceAsync(this);
+            createDevice.execute(device);
 
+        } else {
+            makeToast("empty geo received!");
+        }
+    }
+
+    private void makeToast(String message) {
+        if (BuildConfig.DEBUG)
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private class CreateDeviceAsync extends AsyncTask<Device, Void, Device> {
+        private DeviceDao dao;
+
+        CreateDeviceAsync(Context context) {
+            dao = new DeviceDao(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                dao.open();
+                Logger.d(TAG, "dao opened");
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+        }
+
+        @Override
+        protected Device doInBackground(Device... params) {
+            Device device = params[0];
+            Device createdDevice = null;
+            if (null != device) {
+                try {
+                    createdDevice = dao.createDevice(device);
+                } catch (SQLException e) {
+                    Logger.e(TAG, e.getLocalizedMessage());
+                }
+            }
+            Logger.d(TAG, "created evice : " + String.valueOf(createdDevice));
+            return createdDevice;
+        }
+
+        @Override
+        protected void onPostExecute(Device deviceCreated) {
+            try {
+                dao.close();
+                Logger.d(TAG, "dao closed");
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            if (null != deviceCreated) {
+                createdDevice = deviceCreated;
+                connectionHasSucceeded = true;
+                showProgressBar(false);
+            }
+
+        }
     }
 }

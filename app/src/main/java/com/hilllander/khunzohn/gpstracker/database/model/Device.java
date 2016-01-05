@@ -1,9 +1,11 @@
 package com.hilllander.khunzohn.gpstracker.database.model;
 
+import java.io.Serializable;
+
 /**
  *Created by khunzohn on 1/2/16.
  */
-public class Device {
+public class Device implements Serializable {
     public static final String DEFAULT_NAME = "not set";
     public static final String DEFAULT_TYPE = "not set";
     public static final String UN_AUTHORIZED = "un-authorized";

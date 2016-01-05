@@ -17,8 +17,7 @@ import java.util.TimerTask;
 public class MarketingActivity extends AppCompatActivity {
 
     public static final int NUM_PAGES = 4;
-    public static final String KEY_SIM_NUMBER = "key for sim number";
-    public static final String KEY_CONNECTOR_FLAG = "key connector flag";
+    public static final String KEY_FIRST_APP_LAUNCH = "key using for first app Launch";
     private static final String TAG = Logger.generateTag(MarketingActivity.class);
     View selectedIndicator;
     private ViewPager pager;
@@ -104,6 +103,7 @@ public class MarketingActivity extends AppCompatActivity {
 
     private void gotoConnectActivity() {
         Intent intent = new Intent(MarketingActivity.this, ConnectActivity.class);
+        intent.putExtra(KEY_FIRST_APP_LAUNCH, true);
         startActivity(intent);
         finish();
     }
