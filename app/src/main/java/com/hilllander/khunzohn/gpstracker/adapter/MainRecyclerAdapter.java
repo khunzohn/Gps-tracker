@@ -34,11 +34,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Logger.d(TAG, "contructor triggered");
     }
 
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
-        for (Device device : devices) {
-            Logger.logDevice(TAG, device);
-        }
+    public void setDevices(List<Device> mDevices) {
+        this.devices = mDevices;
         notifyDataSetChanged();
     }
 
@@ -106,7 +103,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return null != devices ? devices.size() : 0;
+        return devices.size();
     }
 
     public interface OnDeviceOnClickListener {

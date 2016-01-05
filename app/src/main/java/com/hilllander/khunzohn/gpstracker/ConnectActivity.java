@@ -135,6 +135,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     }
 
     private void onSucceeded(Device device) {
+        Logger.d(TAG, null != device ? "device created: " + device.toString() : "device is null!");
         if (firstAppLaunch) {
             Intent main = new Intent(ConnectActivity.this, MainActivity.class);
             main.putExtra(KEY_DEVICE_EXTRA, device);

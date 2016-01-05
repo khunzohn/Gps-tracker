@@ -1,6 +1,8 @@
 package com.hilllander.khunzohn.gpstracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +13,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.hilllander.khunzohn.gpstracker.adapter.MainRecyclerAdapter;
+import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,16 +58,19 @@ public class MainActivity extends AppCompatActivity implements
         Bundle bundle = getIntent().getExtras();
         //activity started from ConnectActivity's connecting succeeded (triggered once at app's first lunch)
         if (null != bundle) {
-            devices.add((Device) bundle.getParcelable(ConnectActivity.KEY_DEVICE_EXTRA));
+            devices.add((Device) bundle.getSerializable(ConnectActivity.KEY_DEVICE_EXTRA));
             adapter.setDevices(devices);
         }
+        GetAllDevicesFromDb getAllDeviceSFromDb = new GetAllDevicesFromDb(this);
+        getAllDeviceSFromDb.execute();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (REQUEST_CODE_CONNECT == requestCode) {
             if (RESULT_OK == resultCode) {
-                devices.add((Device) data.getParcelableExtra(ConnectActivity.KEY_DEVICE_EXTRA));
+                Device returnedDevice = (Device) data.getExtras().getSerializable(ConnectActivity.KEY_DEVICE_EXTRA);
+                devices.add(returnedDevice);
                 adapter.setDevices(devices);
             }
         }
@@ -92,5 +99,49 @@ public class MainActivity extends AppCompatActivity implements
     private void makeToast(String message) {
         if (BuildConfig.DEBUG)
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private class GetAllDevicesFromDb extends AsyncTask<Void, Void, List<Device>> {
+        private DeviceDao dao;
+
+        public GetAllDevicesFromDb(Context context) {
+            dao = new DeviceDao(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                dao.open();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+        }
+
+        @Override
+        protected List<Device> doInBackground(Void... params) {
+            List<Device> devices = new ArrayList<>();
+            try {
+                devices = dao.getAllDevices();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            if (null != devices) {
+                Logger.d(TAG, "devices size : " + devices.size());
+            }
+            return devices;
+        }
+
+        @Override
+        protected void onPostExecute(List<Device> allDevices) {
+            try {
+                dao.close();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            if (null != allDevices) {
+                devices = allDevices;
+                adapter.setDevices(devices);
+            }
+        }
     }
 }

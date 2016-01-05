@@ -63,8 +63,10 @@ public class Logger {
         StackTraceElement[] e = throwable.getStackTrace();
         String methodName = e[1].getMethodName();
         if (BuildConfig.DEBUG) {
-            Log.d(tag, "[" + methodName + "]" + "Id : " + device.getId() + "\n" + "Name : " + device.getDeviceName() + "\n"
-                    + "Sim : " + device.getSimNumber());
+            Log.d(tag, "[" + methodName + "]" +
+                    "Id : " + device.getId() + "\n" +
+                    "Name : " + device.getDeviceName() + "\n" +
+                    "Sim : " + device.getSimNumber());
         }
     }
 }
