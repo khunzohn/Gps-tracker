@@ -8,15 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hilllander.khunzohn.gpstracker.adapter.MarketingPagerAdapter;
-import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
-import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MarketingActivity extends AppCompatActivity implements MarketingFragments.ConnectorListener {
+public class MarketingActivity extends AppCompatActivity {
 
     public static final int NUM_PAGES = 4;
     public static final String KEY_SIM_NUMBER = "key for sim number";
@@ -50,7 +48,7 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
             public void onPageSelected(int position) {
                 currentItem = position;
                 if (null != selectedIndicator) {
-                    // unselect previous selected indicator and un highlight it by changing color to white
+                    // un select previous selected indicator and un highlight it by changing color to white
                     selectedIndicator.setSelected(false);
                 }
                 switch (position) {
@@ -83,56 +81,35 @@ public class MarketingActivity extends AppCompatActivity implements MarketingFra
         final Runnable swipe = new Runnable() {
             @Override
             public void run() {
-                if (currentItem == NUM_PAGES - 1) {
-                    currentItem--;
+
+                if (currentItem > NUM_PAGES - 1) {
+                    gotoConnectActivity();
                 }
-                pager.setCurrentItem(currentItem + 1, true);
+                pager.setCurrentItem(currentItem, true);
             }
         };
-        Timer timer = new Timer("swiper", false);
+        final Timer timer = new Timer("swiper", false);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                currentItem++;
+                if (currentItem > NUM_PAGES - 1) {
+                    timer.cancel();
+                }
                 swiper.post(swipe);
             }
         }, 4000, 4000); // swipe pager every 4 sec
 
     }
 
-
+    private void gotoConnectActivity() {
+        Intent intent = new Intent(MarketingActivity.this, ConnectActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public void onBackPressed() {
         //disable back press
-    }
-
-    @Override
-    public void connect(String simNum, int connectorFlag) {
-        Logger.d(TAG, "connector flag" + connectorFlag);
-        switch (connectorFlag) {
-            case MarketingFragments.TEXT:
-                USSD.smsBegin(simNum);
-                break;
-            case MarketingFragments.PHONE:
-                //TODO replace with phone call connecting
-                USSD.smsBegin(simNum);
-                break;
-        }
-    }
-
-    @Override
-    public void onConnectLater(int connectorFlag) {
-        Intent main = new Intent(MarketingActivity.this, MainActivity.class);
-        startActivity(main);
-        finish();
-    }
-
-    @Override
-    public void onSucceeded(String simNum, int connectorFlag) {
-        Intent main = new Intent(MarketingActivity.this, MainActivity.class);
-        main.putExtra(KEY_SIM_NUMBER, simNum);
-        main.putExtra(KEY_CONNECTOR_FLAG, connectorFlag);
-        startActivity(main);
-        finish();
     }
 }

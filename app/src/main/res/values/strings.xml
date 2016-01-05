@@ -159,4 +159,5 @@
     <string name="image_place_content_description">image showing place</string>
     <string name="image_clock_content_description">image showing last tracked time</string>
     <string name="profile_image_content_description">device\'s profile picture</string>
+    <string name="title_activity_connect">Connect</string>
 </resources>
