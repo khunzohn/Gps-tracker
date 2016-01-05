@@ -1,7 +1,9 @@
+import java.text.DateFormat
+
 apply plugin: 'com.android.application'
 
 def buildTime() {
-    return new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+    return DateFormat.getDateTimeInstance().format(new Date())
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -25,13 +27,12 @@ android {
     buildTypes {
         debug {
             resValue "string", "google_maps_api_key", "AIzaSyCOeKXHAYPNFV2LQYb0HdsTFMNZ1ymo3c8"
-            versionNameSuffix "-debug" + "-build" + buildTime()
+            versionNameSuffix "-debug" + buildTime()
         }
         release {
             resValue "string", "google_maps_api_key", "//TODO replage with release api key"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            versionNameSuffix "-${gitSha}"
         }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
