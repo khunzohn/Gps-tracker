@@ -5,10 +5,8 @@ def buildTime() {
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-
-def versionMajor = 0
-def versionMinor = 0
-def versionPatch = 1
+def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+def commitCount = 100 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
     compileSdkVersion 23
@@ -21,8 +19,8 @@ android {
         buildConfigField "String", "BUILD_TIME", "\"${buildTime()}\""
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
 
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode commitCount
+        versionName gitTag
     }
     buildTypes {
         debug {
