@@ -38,6 +38,7 @@
     <string name="title_remove_password">လျို့ဝှက်ကုဒ်ဖြုတ်မယ်</string>
     <string name="label_enter_password">လျို့ဝှက်ကုဒ်ထဲ့ပါ</string>
     <string name="label_re_enter_password">နောက်တစ်ကြိမ်ထဲ့ပါ</string>
+    <string name="label_password">လျို့ဝှက်ကုဒ်</string>
     <string name="button_ok">ကောင်းပြီ</string>
     <string name="label_wrong_password_pattern">နှစ်သက်ရာဂဏန်း၆ လုံးတိတိသာ</string>
     <string name="label_password_mismatch">လျို့ဝှက်ကုဒ်ချင်းမတူပါ</string>
@@ -160,4 +161,14 @@
     <string name="image_clock_content_description">image showing last tracked time</string>
     <string name="profile_image_content_description">device\'s profile picture</string>
     <string name="title_activity_connect">Connect</string>
+    <string name="title_activity_edit_profile">Edit profile</string>
+    <string name="label_gps_name_default">not set</string>
+    <string name="edit_name_content_description">edit device name</string>
+    <string name="label_gps_type_default">not set</string>
+    <string name="label_gps_authorization">Authorization</string>
+    <string name="edit_sim_number_content_description">edit sim number</string>
+    <string name="edit_type_content_description">edit type</string>
+    <string name="label_gps_sim_number_default">+957654123</string>
+    <string name="label_gps_authorization_default">un authorization</string>
+    <string name="edit_authorizaiton_content_description">edit authorization</string>
 </resources>

@@ -9,10 +9,11 @@ import com.hilllander.khunzohn.gpstracker.util.Logger;
 
 /**
  *Created by khunzohn on 1/2/16.
+ * updated to version 2 on 1/6/16.
  */
 public class GpsDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "devices.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String TAG = Logger.generateTag(GpsDbHelper.class);
 
     public GpsDbHelper(Context context) {

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".EditProfileActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@color/blue_500"
+        android:fitsSystemWindows="true"
+        app:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/blue_500"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@color/blue_700">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/blue_500"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/cardview_margin"
+        android:paddingEnd="@dimen/cardview_margin"
+        android:paddingLeft="@dimen/cardview_margin"
+        android:paddingRight="@dimen/cardview_margin"
+        android:paddingStart="@dimen/cardview_margin"
+        android:paddingTop="@dimen/height_content_gap"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/cardview_radius"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/pink_100"
+                android:padding="@dimen/cardview_margin">
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/label_gps_name"
+                    android:textColor="@color/deep_purple_500" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvNameValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvName"
+                    android:textColor="@color/deep_purple_200"
+                    android:textSize="@dimen/normal_text"
+                    tools:text="@string/label_gps_name_default" />
+
+                <ImageButton
+                    android:id="@+id/ibEditName"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/tvName"
+                    android:background="@color/deep_purple_700"
+                    android:contentDescription="@string/edit_name_content_description"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvNameValue"
+                    android:layout_marginTop="@dimen/cardview_margin"
+                    android:text="@string/label_gps_type"
+                    android:textColor="@color/deep_purple_500" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvTypeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvType"
+                    android:textColor="@color/deep_purple_200"
+                    android:textSize="@dimen/normal_text"
+                    tools:text="@string/label_gps_type_default" />
+
+                <ImageButton
+                    android:id="@+id/ibEditType"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/tvType"
+                    android:background="@color/deep_purple_700"
+                    android:contentDescription="@string/edit_type_content_description"
+                    android:src="@drawable/ic_edit_white_24dp" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cardview_margin"
+            app:cardCornerRadius="@dimen/cardview_radius"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/pink_100"
+                android:padding="@dimen/cardview_margin">
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvSimNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/label_gps_sim_number"
+                    android:textColor="@color/deep_purple_500" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvSimnumberValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvSimNumber"
+                    android:textColor="@color/deep_purple_200"
+                    android:textSize="@dimen/normal_text"
+                    tools:text="@string/label_gps_sim_number_default" />
+
+                <ImageButton
+                    android:id="@+id/ibEditSimNumber"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/tvSimNumber"
+                    android:background="@color/deep_purple_700"
+                    android:contentDescription="@string/edit_sim_number_content_description"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvAuthorization"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvSimnumberValue"
+                    android:layout_marginTop="@dimen/cardview_margin"
+                    android:text="@string/label_gps_authorization"
+                    android:textColor="@color/deep_purple_500" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvAuthorizationValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvAuthorization"
+                    android:textColor="@color/deep_purple_200"
+                    android:textSize="@dimen/normal_text"
+                    tools:text="@string/label_gps_authorization_default" />
+
+                <ImageButton
+                    android:id="@+id/ibEditAuthorization"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/tvAuthorization"
+                    android:background="@color/deep_purple_700"
+                    android:contentDescription="@string/edit_authorizaiton_content_description"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvAuthorizationValue"
+                    android:layout_marginTop="@dimen/cardview_margin"
+                    android:text="@string/label_password"
+                    android:textColor="@color/deep_purple_500" />
+
+                <mm.technomation.mmtext.MMTextView
+                    android:id="@+id/tvPasswordValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvPassword"
+                    android:textColor="@color/deep_purple_200"
+                    android:textSize="@dimen/normal_text"
+                    tools:text="@string/label_gps_authorization_default" />
+
+                <ImageButton
+                    android:id="@+id/ibEditPassword"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/tvPassword"
+                    android:background="@color/deep_purple_700"
+                    android:contentDescription="@string/edit_authorizaiton_content_description"
+                    android:src="@drawable/ic_edit_white_24dp" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ibProfile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@color/transparent"
+        android:contentDescription="@string/profile_image_content_description"
+        android:src="@drawable/default_device_profile_pic"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

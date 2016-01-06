@@ -1,6 +1,7 @@
 package com.hilllander.khunzohn.gpstracker.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.hilllander.khunzohn.gpstracker.R;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
+import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 
@@ -21,6 +23,7 @@ import mm.technomation.mmtext.MMTextView;
 
 /**
  *Created by khunzohn on 1/2/16.
+ * modified by khunzohn on 1/6/16.(add profile Bitmap)
  */
 public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = Logger.generateTag(MainRecyclerAdapter.class);
@@ -98,6 +101,12 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 onClickListener.onClickProfile(device);
             }
         });
+        if (device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
+            ((MainRecyclerViewHolder) holder).deviceProfile.setBackgroundResource(R.drawable.default_device_profile_pic);
+        } else {
+            ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(BitmapFactory.decodeFile(device.getPhotoUrl()));
+            //TODO test it
+        }
 
     }
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  *Created by khunzohn on 1/2/16.
+ * modified by knunzohn on 1/6/16.
  */
 public class Device implements Serializable {
     public static final String DEFAULT_NAME = "not set";
@@ -20,6 +21,15 @@ public class Device implements Serializable {
     private float longitude;
     private String trackedDate;
     private String trackedTime;
+    private String photoUrl;
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 
     public long getId() {
         return id;
