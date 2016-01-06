@@ -24,6 +24,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         MainRecyclerAdapter.OnDeviceOnClickListener {
+    public static final String KEY_DEVICE = "key for device";
     private static final String TAG = Logger.generateTag(MainActivity.class);
     private static final int REQUEST_CODE_CONNECT = 505;
     private static final int REQUEST_CODE_CAMERA = 623;
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onClickEdit(Device device) {
         Intent editProfile = new Intent(this, EditProfileActivity.class);
+        editProfile.putExtra(KEY_DEVICE, device);
         startActivityForResult(editProfile, REQUEST_CODE_EDIT);
         /*final String items[] = {"Camera","Gallery","Cancel"};
         final AlertDialog dialog = new AlertDialog.Builder(this)
