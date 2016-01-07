@@ -109,6 +109,7 @@ public class ViewUtils {
      *
      * @param bitmap to be rounded
      * @return rounded bitmap
+     *modified by khunzohn on 1/7/16. raised roundPx from 12 to 180
      */
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
@@ -119,7 +120,7 @@ public class ViewUtils {
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-        final float roundPx = 12;
+        final float roundPx = 180;
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);

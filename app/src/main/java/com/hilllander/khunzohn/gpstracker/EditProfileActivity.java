@@ -3,8 +3,11 @@ package com.hilllander.khunzohn.gpstracker;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +26,10 @@ import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import mm.technomation.mmtext.MMButtonView;
@@ -38,6 +47,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = Logger.generateTag(EditProfileActivity.class);
     private static final int REQUEST_EDIT_NAME = 456;
     private static final int REQUEST_EDIT_TYPE = 421;
+    private static final int REQUEST_CAMERA = 789;
+    private static final int REQUEST_GALLERY = 968;
     private TextView tvNameValue;
     private ImageButton ibEditName;
     private TextView tvTypeValue;
@@ -124,7 +135,7 @@ public class EditProfileActivity extends AppCompatActivity {
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                chooseProfile();
             }
         });
         final MMButtonView fine = (MMButtonView) findViewById(R.id.fine);
@@ -141,6 +152,50 @@ public class EditProfileActivity extends AppCompatActivity {
                 deleteDeviceFromDb(device);
             }
         });
+    }
+
+    private void chooseProfile() {
+        final RadioGroup group = new RadioGroup(this);
+        final RadioButton camera = new RadioButton(this);
+        camera.setText("Camera");
+        RadioButton gallary = new RadioButton(this);
+        gallary.setText("Gallery");
+        group.addView(camera);
+        group.addView(gallary);
+        group.check(camera.getId());
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Choose photo")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int checkedId = group.getCheckedRadioButtonId();
+                        if (camera.getId() == checkedId) {
+                            openCamera();
+                        } else {
+                            openGallery();
+                        }
+                    }
+                }).setView(group, 16, 16, 16, 16)
+                .create();
+        dialog.show();
+
+
+    }
+
+    private void openGallery() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        gallery.setType("image/*");
+        startActivityForResult(Intent.createChooser(gallery, "Choose photo"), REQUEST_GALLERY);
+    }
+
+    private void openCamera() {
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(camera, REQUEST_CAMERA);
     }
 
     private void deleteDeviceFromDb(final Device deviceTobeDeleted) {
@@ -188,13 +243,40 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (RESULT_OK == resultCode) {
+            Bundle bundle = data.getExtras();
             if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode) {
-                Bundle bundle = data.getExtras();
+
                 if (null != bundle) {
                     device = (Device) bundle.getSerializable(EditBasicInfoActivity.KEY_RETURNED_DEVICE);
                     if (null != device)
                         setValue(device);
                     infoEdited = true;
+                }
+            } else if (REQUEST_CAMERA == requestCode) {
+                if (null != bundle) {
+                    final Bitmap raw = (Bitmap) bundle.get("data");
+                    if (null != raw) {
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+                        Bitmap roundedRaw = ViewUtils.getRoundedCornerBitmap(raw);
+                        roundedRaw.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+                        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                                System.currentTimeMillis() + ".jpg");
+                        FileOutputStream out;
+                        try {
+                            out = new FileOutputStream(path);
+                            out.write(bytes.toByteArray());
+                            out.close();
+                        } catch (IOException e) {
+                            Logger.e(TAG, e.getLocalizedMessage());
+                        }
+                        ibProfile.setImageBitmap(roundedRaw);
+                    }
+                }
+            } else if (REQUEST_GALLERY == requestCode) {
+                if (null != bundle) {
+
                 }
             }
         }
