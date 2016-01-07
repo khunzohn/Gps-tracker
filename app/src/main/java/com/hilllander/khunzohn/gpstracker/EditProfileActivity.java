@@ -3,12 +3,15 @@ package com.hilllander.khunzohn.gpstracker;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -282,7 +285,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             } else if (REQUEST_GALLERY == requestCode) {
                 if (null != bundle) {
-
+                    Uri uri = data.getData();
+                    String projections[] = {MediaStore.MediaColumns.DATA};
+                    CursorLoader loader = new CursorLoader(this, uri, projections, null, null, null);
+                    Cursor cursor = loader.loadInBackground();
+                    int dataColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                    cursor.moveToFirst();
+                    String urlPath = cursor.getString(dataColumnIndex);
+                    ibProfile.setImageBitmap(BitmapFactory.decodeFile(urlPath));
+                    saveUrlToDb(urlPath);
                 }
             }
         }
