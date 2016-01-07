@@ -1,10 +1,12 @@
 package com.hilllander.khunzohn.gpstracker;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -141,9 +143,26 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteDeviceFromDb(Device device) {
-        DeleteDeviceFromDb delete = new DeleteDeviceFromDb(this);
-        delete.execute(device);
+    private void deleteDeviceFromDb(final Device deviceTobeDeleted) {
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Confirm to delete")
+                .setMessage("Are your sure you want to permanently delete this device?")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DeleteDeviceFromDb delete = new DeleteDeviceFromDb(EditProfileActivity.this);
+                        delete.execute(deviceTobeDeleted);
+                    }
+                })
+                .create();
+        dialog.show();
+
     }
 
     private void setValue(Device device) {
