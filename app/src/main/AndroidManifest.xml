@@ -79,6 +79,11 @@
             android:label="@string/title_activity_edit_profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditBasicInfoActivity"
+            android:label="@string/title_activity_edit"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
