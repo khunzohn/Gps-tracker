@@ -263,15 +263,6 @@
                         android:text="@string/label_delete_this_device"
                         android:textColor="@color/red_500" />
 
-                    <View
-                        android:id="@+id/line"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/deleteTitle"
-                        android:layout_marginBottom="@dimen/text_view_padding"
-                        android:layout_marginTop="@dimen/text_view_padding"
-                        android:background="@color/red_700" />
-
                     <ImageButton
                         android:id="@+id/deleteDevice"
                         android:layout_width="wrap_content"

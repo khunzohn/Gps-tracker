@@ -259,9 +259,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     final Bitmap raw = (Bitmap) bundle.get("data");
                     if (null != raw) {
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-
-                        Bitmap roundedRaw = ViewUtils.getRoundedCornerBitmap(raw);
-                        roundedRaw.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        raw.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
                         File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                                 System.currentTimeMillis() + ".jpg");
@@ -273,7 +271,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Logger.e(TAG, e.getLocalizedMessage());
                         }
-                        ibProfile.setImageBitmap(roundedRaw);
+                        ibProfile.setImageBitmap(raw);
+                        saveUrlToDb(path.getPath());
                     }
                 }
             } else if (REQUEST_GALLERY == requestCode) {
@@ -282,6 +281,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void saveUrlToDb(String url) {
+        device.setPhotoUrl(url);
+        SavePhotoUrlToDb saveUrl = new SavePhotoUrlToDb(this);
+        saveUrl.execute(device);
     }
 
     @Override
@@ -339,4 +344,47 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
     }
+
+    private class SavePhotoUrlToDb extends AsyncTask<Device, Void, Device> {
+        private DeviceDao dao;
+
+        public SavePhotoUrlToDb(Context context) {
+            dao = new DeviceDao(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                dao.open();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+        }
+
+        @Override
+        protected Device doInBackground(Device... params) {
+            Device device = params[0];
+            Device deviceUpdated = new Device();
+            try {
+                deviceUpdated = dao.updateDevice(device);
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            return deviceUpdated;
+        }
+
+        @Override
+        protected void onPostExecute(Device deviceUpdated) {
+            try {
+                dao.close();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            if (null != deviceUpdated) {
+                Logger.d(TAG, "Photo url changed successfully!");
+                infoEdited = true;
+            }
+        }
+    }
+
 }
