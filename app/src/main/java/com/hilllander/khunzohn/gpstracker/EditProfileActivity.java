@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
+import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
@@ -134,6 +136,9 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
         ibProfile = (CircleImageView) findViewById(R.id.ibProfile);
+        if (!device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
+            ibProfile.setImageBitmap(BitmapFactory.decodeFile(device.getPhotoUrl()));
+        }
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
