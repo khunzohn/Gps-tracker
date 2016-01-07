@@ -308,13 +308,17 @@
     </android.support.v4.widget.NestedScrollView>
 
 
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ibProfile"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:background="@color/transparent"
         android:contentDescription="@string/profile_image_content_description"
-        android:src="@drawable/default_device_profile_pic"
+        android:src="@drawable/ic_add_white_24dp"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_overlay="true"
+        app:civ_border_width="2dp"
+        app:civ_fill_color="@color/blue_300"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hilllander.khunzohn.gpstracker.R;
@@ -19,6 +18,7 @@ import com.hilllander.khunzohn.gpstracker.util.USSD;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mm.technomation.mmtext.MMTextView;
 
 /**
@@ -102,7 +102,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         });
         if (device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
-            ((MainRecyclerViewHolder) holder).deviceProfile.setBackgroundResource(R.drawable.default_device_profile_pic);
+            ((MainRecyclerViewHolder) holder).deviceProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_white_24dp));
         } else {
             ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(BitmapFactory.decodeFile(device.getPhotoUrl()));
             //TODO test it
@@ -126,7 +126,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class MainRecyclerViewHolder extends RecyclerView.ViewHolder {
-        private ImageView deviceProfile;
+        private CircleImageView deviceProfile;
         private MMTextView authorization, tvGoToMap;
         private TextView deviceName, simNumber, tvLatValue, tvLongValue, tvDateTime;
         private ImageButton ibLock, ibEdit;
@@ -134,7 +134,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public MainRecyclerViewHolder(View v) {
             super(v);
             Logger.d(TAG, "ViewHolder constructor triggered ");
-            deviceProfile = (ImageView) v.findViewById(R.id.deviceProfile);
+            deviceProfile = (CircleImageView) v.findViewById(R.id.deviceProfile);
             deviceName = (TextView) v.findViewById(R.id.deviceName);
             authorization = (MMTextView) v.findViewById(R.id.authorization);
             tvGoToMap = (MMTextView) v.findViewById(R.id.tvGoToMap);

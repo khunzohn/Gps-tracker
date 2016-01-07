@@ -16,15 +16,18 @@
         android:layout_height="match_parent"
         android:background="@color/blue_300">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/deviceProfile"
             android:layout_width="@dimen/circle_image_size"
             android:layout_height="@dimen/circle_image_size"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/text_view_padding"
             android:contentDescription="@string/profile_image_content_description"
-            android:padding="@dimen/text_view_padding"
-            android:src="@drawable/default_device_profile_pic" />
+            android:src="@drawable/ic_add_white_24dp"
+            app:civ_border_color="@color/indigo_500"
+            app:civ_border_width="2dp"
+            app:civ_fill_color="@color/grey" />
 
         <TextView
             android:id="@+id/deviceName"

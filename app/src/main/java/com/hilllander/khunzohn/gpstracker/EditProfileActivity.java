@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mm.technomation.mmtext.MMButtonView;
 import mm.technomation.mmtext.MMTextView;
 
@@ -58,7 +59,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private MMTextView tvAuthorizationValue;
     private ImageButton ibEditAuthorization;
     private MMTextView tvPasswordValue;
-    private ImageButton ibEditPassword, ibProfile, deleteDevice;
+    private ImageButton ibEditPassword, deleteDevice;
+    private CircleImageView ibProfile;
     private Device device;
     private boolean infoEdited = false;
     @Override
@@ -131,7 +133,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
-        ibProfile = (ImageButton) findViewById(R.id.ibProfile);
+        ibProfile = (CircleImageView) findViewById(R.id.ibProfile);
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

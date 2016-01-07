@@ -27,4 +27,5 @@
     <color name="blue_700">#1976d2</color>
     <color name="blue_300">#64b5f6</color>
     <color name="accent_material_light">#152496</color>
+    <color name="indigo_alpha">#ab3f51b5</color>
 </resources>
