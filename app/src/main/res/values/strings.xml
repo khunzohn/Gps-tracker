@@ -174,4 +174,7 @@
     <string name="title_activity_edit">Edit</string>
     <string name="close_button_content_description">close button</string>
     <string name="edit_text_default_hint">Enter device info</string>
+    <string name="label_delete_this_device">Delete this device</string>
+    <string name="delete_message">Device will be deleted from database</string>
+    <string name="delete_button_content_description">delete this device</string>
 </resources>

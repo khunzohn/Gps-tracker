@@ -99,7 +99,14 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
             } */ else if (REQUEST_CODE_EDIT == requestCode) {
-
+                Bundle bundle = data.getExtras();
+                if (null != bundle) {
+                    boolean infoEdited = bundle.getBoolean(EditProfileActivity.KEY_INFO_EDITED);
+                    if (infoEdited) {
+                        GetAllDevicesFromDb getAllDevicesFromDb = new GetAllDevicesFromDb(this);
+                        getAllDevicesFromDb.execute();
+                    }
+                }
             }
         }
     }

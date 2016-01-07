@@ -72,7 +72,7 @@ public class DeviceDao {
         return createdDevice;
     }
 
-    public boolean deleteDevice(String deviceId) {
+    public boolean deleteDevice(String deviceId) throws SQLException {
         int numOfDeviceDeleted = db.delete(DeviceTable.TABLE_NAME_DEVICE, DeviceTable.COLUMN_ID + " = " + deviceId, null);
         if (numOfDeviceDeleted > 0) {
             Logger.d(TAG, "Device with id " + deviceId + " has been deleted from db");

@@ -74,7 +74,7 @@
                         android:text="@string/label_gps_name"
                         android:textColor="@color/deep_purple_500" />
 
-                    <mm.technomation.mmtext.MMTextView
+                    <TextView
                         android:id="@+id/tvNameValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                         android:text="@string/label_gps_type"
                         android:textColor="@color/deep_purple_500" />
 
-                    <mm.technomation.mmtext.MMTextView
+                    <TextView
                         android:id="@+id/tvTypeValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -241,6 +241,49 @@
                         android:src="@drawable/ic_edit_white_24dp" />
                 </RelativeLayout>
 
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/cardview_margin">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/cardview_margin">
+
+                    <mm.technomation.mmtext.MMTextView
+                        android:id="@+id/deleteTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/label_delete_this_device"
+                        android:textColor="@color/red_500" />
+
+                    <View
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/deleteTitle"
+                        android:layout_marginBottom="@dimen/text_view_padding"
+                        android:layout_marginTop="@dimen/text_view_padding"
+                        android:background="@color/red_700" />
+
+                    <ImageButton
+                        android:id="@+id/deleteDevice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@+id/deleteTitle"
+                        android:background="@color/red_700"
+                        android:contentDescription="@string/delete_button_content_description"
+                        android:src="@drawable/ic_close_white_24dp" />
+
+                </RelativeLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView

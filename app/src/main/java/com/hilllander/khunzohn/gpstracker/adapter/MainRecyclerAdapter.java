@@ -57,7 +57,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Device device = devices.get(position);
         Logger.logDevice(TAG, device);
-        ((MainRecyclerViewHolder) holder).deviceName.setMyanmarText(device.getDeviceName());
+        ((MainRecyclerViewHolder) holder).deviceName.setText(device.getDeviceName());
         ((MainRecyclerViewHolder) holder).simNumber.setText(device.getSimNumber());
         if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
             ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_open_white_24dp);
@@ -127,15 +127,15 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class MainRecyclerViewHolder extends RecyclerView.ViewHolder {
         private ImageView deviceProfile;
-        private MMTextView deviceName, authorization, tvGoToMap;
-        private TextView simNumber, tvLatValue, tvLongValue, tvDateTime;
+        private MMTextView authorization, tvGoToMap;
+        private TextView deviceName, simNumber, tvLatValue, tvLongValue, tvDateTime;
         private ImageButton ibLock, ibEdit;
 
         public MainRecyclerViewHolder(View v) {
             super(v);
             Logger.d(TAG, "ViewHolder constructor triggered ");
             deviceProfile = (ImageView) v.findViewById(R.id.deviceProfile);
-            deviceName = (MMTextView) v.findViewById(R.id.deviceName);
+            deviceName = (TextView) v.findViewById(R.id.deviceName);
             authorization = (MMTextView) v.findViewById(R.id.authorization);
             tvGoToMap = (MMTextView) v.findViewById(R.id.tvGoToMap);
             simNumber = (TextView) v.findViewById(R.id.simNumber);

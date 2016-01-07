@@ -1,6 +1,8 @@
 package com.hilllander.khunzohn.gpstracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,11 +10,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
+
+import java.sql.SQLException;
 
 import mm.technomation.mmtext.MMButtonView;
 import mm.technomation.mmtext.MMTextView;
@@ -25,20 +32,22 @@ public class EditProfileActivity extends AppCompatActivity {
     public static final String TITLE_CHANGE_NAME = "Change name";
     public static final String TITLE_CHANGE_TYPE = "Change type";
     public static final String KEY_DEVICE = "key for device";
+    public static final String KEY_INFO_EDITED = "key for info edited";
     private static final String TAG = Logger.generateTag(EditProfileActivity.class);
     private static final int REQUEST_EDIT_NAME = 456;
     private static final int REQUEST_EDIT_TYPE = 421;
-    private MMTextView tvNameValue;
+    private TextView tvNameValue;
     private ImageButton ibEditName;
-    private MMTextView tvTypeValue;
+    private TextView tvTypeValue;
     private ImageButton ibEditType;
     private MMTextView tvSimnumberValue;
     private ImageButton ibEditSimNumber;
     private MMTextView tvAuthorizationValue;
     private ImageButton ibEditAuthorization;
     private MMTextView tvPasswordValue;
-    private ImageButton ibEditPassword, ibProfile;
+    private ImageButton ibEditPassword, ibProfile, deleteDevice;
     private Device device;
+    private boolean infoEdited = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +60,8 @@ public class EditProfileActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         ViewUtils.setStatusBarTint(this, R.color.indigo_700);
-        tvNameValue = (MMTextView) findViewById(R.id.tvNameValue);
-        tvTypeValue = (MMTextView) findViewById(R.id.tvTypeValue);
+        tvNameValue = (TextView) findViewById(R.id.tvNameValue);
+        tvTypeValue = (TextView) findViewById(R.id.tvTypeValue);
         tvSimnumberValue = (MMTextView) findViewById(R.id.tvSimnumberValue);
         tvAuthorizationValue = (MMTextView) findViewById(R.id.tvAuthorizationValue);
         tvPasswordValue = (MMTextView) findViewById(R.id.tvPasswordValue);
@@ -120,14 +129,26 @@ public class EditProfileActivity extends AppCompatActivity {
         fine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
+            }
+        });
+        deleteDevice = (ImageButton) findViewById(R.id.deleteDevice);
+        deleteDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDeviceFromDb(device);
             }
         });
     }
 
+    private void deleteDeviceFromDb(Device device) {
+        DeleteDeviceFromDb delete = new DeleteDeviceFromDb(this);
+        delete.execute(device);
+    }
+
     private void setValue(Device device) {
-        tvNameValue.setMyanmarText(device.getDeviceName());
-        tvTypeValue.setMyanmarText(device.getDeviceType());
+        tvNameValue.setText(device.getDeviceName());
+        tvTypeValue.setText(device.getDeviceType());
         tvAuthorizationValue.setMyanmarText(device.getAuthorization());
         tvSimnumberValue.setMyanmarText(device.getSimNumber());
         if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
@@ -151,11 +172,68 @@ public class EditProfileActivity extends AppCompatActivity {
             if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode) {
                 Bundle bundle = data.getExtras();
                 if (null != bundle) {
-                    Device device = (Device) bundle.getSerializable(EditBasicInfoActivity.KEY_RETURNED_DEVICE);
+                    device = (Device) bundle.getSerializable(EditBasicInfoActivity.KEY_RETURNED_DEVICE);
                     if (null != device)
                         setValue(device);
+                    infoEdited = true;
                 }
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (infoEdited) {
+            Intent returnedIntent = new Intent();
+            returnedIntent.putExtra(KEY_INFO_EDITED, infoEdited);
+            setResult(RESULT_OK, returnedIntent);
+        }
+        super.onBackPressed();
+    }
+
+    private class DeleteDeviceFromDb extends AsyncTask<Device, Void, Boolean> {
+        private DeviceDao dao;
+
+        public DeleteDeviceFromDb(Context context) {
+            dao = new DeviceDao(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                dao.open();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(Device... params) {
+            Device device = params[0];
+            Boolean deleted = false;
+            try {
+                deleted = dao.deleteDevice(String.valueOf(device.getId()));
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            return deleted;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean deleted) {
+            try {
+                dao.close();
+            } catch (SQLException e) {
+                Logger.e(TAG, e.getLocalizedMessage());
+            }
+            if (deleted) {
+                Toast.makeText(EditProfileActivity.this, "Deleted successfully!", Toast.LENGTH_SHORT).show();
+                infoEdited = true;
+                onBackPressed();
+            } else {
+                Toast.makeText(EditProfileActivity.this, "Something went wrong deleting this device!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }
