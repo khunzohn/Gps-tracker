@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hilllander.khunzohn.gpstracker.adapter.MainRecyclerAdapter;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = Logger.generateTag(MainActivity.class);
     private static final int REQUEST_CODE_CONNECT = 505;
     private static final int REQUEST_CODE_EDIT = 456;
+    private static final int REQUEST_CODE_MAP = 222;
     private List<Device> devices;
     private MainRecyclerAdapter adapter;
 
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements
                         getAllDevicesFromDb.execute();
                     }
                 }
+            } else if (REQUEST_CODE_MAP == requestCode) {
+
             }
         }
     }
@@ -97,12 +99,9 @@ public class MainActivity extends AppCompatActivity implements
     }
     @Override
     public void onClickGoToMap(Device device) {
-        makeToast("go to map : " + device.getDeviceName());
-    }
-
-    private void makeToast(String message) {
-        if (BuildConfig.DEBUG)
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Intent map = new Intent(MainActivity.this, MapsActivity.class);
+        map.putExtra(KEY_DEVICE, device);
+        startActivityForResult(map, REQUEST_CODE_MAP);
     }
 
     private class GetAllDevicesFromDb extends AsyncTask<Void, Void, List<Device>> {
