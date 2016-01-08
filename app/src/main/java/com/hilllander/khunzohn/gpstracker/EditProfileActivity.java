@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import android.widget.Toast;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
+import com.hilllander.khunzohn.gpstracker.util.BitmapUtil;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
@@ -144,7 +144,9 @@ public class EditProfileActivity extends AppCompatActivity {
         });
         ibProfile = (CircleImageView) findViewById(R.id.ibProfile);
         if (!device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
-            ibProfile.setImageBitmap(BitmapFactory.decodeFile(device.getPhotoUrl()));
+            String photoUrl = device.getPhotoUrl();
+            Bitmap bm = BitmapUtil.scaledBitmap(photoUrl);
+            ibProfile.setImageBitmap(bm);
         }
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,7 +298,10 @@ public class EditProfileActivity extends AppCompatActivity {
                     int dataColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
                     cursor.moveToFirst();
                     String urlPath = cursor.getString(dataColumnIndex);
-                    ibProfile.setImageBitmap(BitmapFactory.decodeFile(urlPath));
+
+                    Bitmap bm = BitmapUtil.scaledBitmap(urlPath);
+
+                    ibProfile.setImageBitmap(bm);
                     saveUrlToDb(urlPath);
                 }
             }

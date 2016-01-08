@@ -1,7 +1,7 @@
 package com.hilllander.khunzohn.gpstracker.adapter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.hilllander.khunzohn.gpstracker.R;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
+import com.hilllander.khunzohn.gpstracker.util.BitmapUtil;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 
@@ -104,7 +105,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
             ((MainRecyclerViewHolder) holder).deviceProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_white_24dp));
         } else {
-            ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(BitmapFactory.decodeFile(device.getPhotoUrl()));
+            String url = device.getPhotoUrl();
+            Bitmap bm = BitmapUtil.scaledBitmap(url);
+            ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(bm);
             //TODO test it
         }
 
