@@ -4,7 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
- * Created by khuzohn on 1/8/16.
+ *Created by khuzohn on 1/8/16.
+ * code pieces Took from online tutorial
  */
 public class BitmapUtil {
     public static Bitmap scaledBitmap(String bitmapPath) {

@@ -1,12 +1,10 @@
 package com.hilllander.khunzohn.gpstracker;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -17,6 +15,7 @@ import android.widget.EditText;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
+import com.hilllander.khunzohn.gpstracker.util.DialogUtil;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
@@ -38,7 +37,6 @@ public class EditSimNumActivity extends AppCompatActivity implements USSDRecieve
     private Device device;
     private int checkCount = 0;
     private Timer statusChecker;
-    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +101,7 @@ public class EditSimNumActivity extends AppCompatActivity implements USSDRecieve
             @Override
             public void run() {
                 showProgressBar(false);
+                checkCount = 0;
                 statusChecker.cancel();
                 showErrorDialog();
             }
@@ -124,40 +123,17 @@ public class EditSimNumActivity extends AppCompatActivity implements USSDRecieve
     }
 
     private void showErrorDialog() {
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setCancelable(false)
-                .setTitle("Connecting Failed!")
-                .setMessage("Can't connect to the device.\n" +
-                        "Make sure you've entered the number correctly and\n" +
-                        "the device is turned on.")
-                .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton("Later", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onBackPressed();
-                    }
-                })
-                .create();
-        dialog.show();
+        String title = "Connecting Failed!";
+        String message = "Can't connect to the device.\n" +
+                "Make sure you've entered the number correctly and" +
+                "the device is turned on.";
+        String negativeBtn = "retry";
+        String positiveBtn = "Later";
+        DialogUtil.showErrorDialog(this, title, message, negativeBtn, positiveBtn);
     }
 
     private void showProgressBar(boolean visible) {
-        if (null == progressDialog) {
-            progressDialog = new AlertDialog.Builder(this)
-                    .setCancelable(false)
-                    .setView(R.layout.dialog_register_new_divice_progress_bar)
-                    .create();
-        }
-        if (visible) {
-            progressDialog.show();
-        } else {
-            progressDialog.dismiss();
-        }
+        DialogUtil.showProgressBar(this, R.layout.dialog_register_new_divice_progress_bar, visible);
     }
 
     @Override

@@ -177,5 +177,8 @@
     <string name="label_delete_this_device">Delete this device</string>
     <string name="delete_message">Device will be deleted from database</string>
     <string name="delete_button_content_description">delete this device</string>
-    <string name="label_connecting_gps">connecting GPS...</string>
+    <string name="label_connecting_gps">connecting to GPS…</string>
+    <string name="label_enter_authorizing">Enter authorizing number</string>
+    <string name="label_no_password">လျို့ဝှက်ကုဒ်မရှိပါ</string>
+    <string name="label_secured_with_password">လျို့ဝှက်ကုဒ်ရှိပါသည</string>
 </resources>

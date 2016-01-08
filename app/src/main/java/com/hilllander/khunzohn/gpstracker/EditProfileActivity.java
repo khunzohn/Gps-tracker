@@ -57,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 789;
     private static final int REQUEST_GALLERY = 968;
     private static final int REQUEST_EDIT_SIM = 4521;
+    private static final int REQUEST_EDIT_AUTHORIZATION = 333;
     private TextView tvNameValue;
     private ImageButton ibEditName;
     private TextView tvTypeValue;
@@ -132,7 +133,9 @@ public class EditProfileActivity extends AppCompatActivity {
         ibEditAuthorization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent authorization = new Intent(EditProfileActivity.this, EditAuthorizationActivity.class);
+                authorization.putExtra(KEY_DEVICE, device);
+                startActivityForResult(authorization, REQUEST_EDIT_AUTHORIZATION);
             }
         });
         ibEditPassword = (ImageButton) findViewById(R.id.ibEditPassword);
@@ -146,7 +149,14 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
             String photoUrl = device.getPhotoUrl();
             Bitmap bm = BitmapUtil.scaledBitmap(photoUrl);
-            ibProfile.setImageBitmap(bm);
+            if (null != bm) {
+                ibProfile.setImageBitmap(bm);
+            } else {
+                Logger.e(TAG, "Can't decode bitmap from file path");
+                ibProfile.setImageResource(R.drawable.default_device_profile_pic);
+            }
+        } else {
+            ibProfile.setImageResource(R.drawable.default_device_profile_pic);
         }
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,12 +249,16 @@ public class EditProfileActivity extends AppCompatActivity {
     private void setValue(Device device) {
         tvNameValue.setText(device.getDeviceName());
         tvTypeValue.setText(device.getDeviceType());
-        tvAuthorizationValue.setMyanmarText(device.getAuthorization());
+        if (device.getAuthorization().equals(Device.UN_AUTHORIZED)) {
+            tvAuthorizationValue.setMyanmarText(this.getString(R.string.label_toggle_action_un_authorized));
+        } else {
+            tvAuthorizationValue.setMyanmarText(this.getString(R.string.label_toggle_action_authorized));
+        }
         tvSimnumberValue.setMyanmarText(device.getSimNumber());
         if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
-            tvPasswordValue.setMyanmarText("no password");
+            tvPasswordValue.setMyanmarText(this.getString(R.string.label_no_password));
         } else {
-            tvPasswordValue.setMyanmarText("secured with password");
+            tvPasswordValue.setMyanmarText(this.getString(R.string.label_secured_with_password));
         }
     }
 
@@ -260,7 +274,8 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (RESULT_OK == resultCode) {
             Bundle bundle = data.getExtras();
-            if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode || REQUEST_EDIT_SIM == requestCode) {
+            if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode ||
+                    REQUEST_EDIT_SIM == requestCode || REQUEST_EDIT_AUTHORIZATION == requestCode) {
 
                 if (null != bundle) {
                     device = (Device) bundle.getSerializable(KEY_RETURNED_DEVICE);

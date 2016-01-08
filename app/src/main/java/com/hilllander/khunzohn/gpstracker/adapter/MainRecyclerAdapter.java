@@ -107,8 +107,12 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
             String url = device.getPhotoUrl();
             Bitmap bm = BitmapUtil.scaledBitmap(url);
-            ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(bm);
-            //TODO test it
+            if (null != bm) {
+                ((MainRecyclerViewHolder) holder).deviceProfile.setImageBitmap(bm);
+            } else {
+                Logger.e(TAG, "Can't decode bitmap from file path!");
+                ((MainRecyclerViewHolder) holder).deviceProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_white_24dp));
+            }
         }
 
     }

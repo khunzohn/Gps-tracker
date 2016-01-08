@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements
     public static final String KEY_DEVICE = "key for device";
     private static final String TAG = Logger.generateTag(MainActivity.class);
     private static final int REQUEST_CODE_CONNECT = 505;
-    private static final int REQUEST_CODE_CAMERA = 623;
-    private static final int REQUEST_CODE_GALLERY = 852;
     private static final int REQUEST_CODE_EDIT = 456;
     private List<Device> devices;
     private MainRecyclerAdapter adapter;
@@ -77,28 +75,7 @@ public class MainActivity extends AppCompatActivity implements
                 Device returnedDevice = (Device) data.getExtras().getSerializable(ConnectActivity.KEY_DEVICE_EXTRA);
                 devices.add(returnedDevice);
                 adapter.setDevices(devices);
-            }/*else if (REQUEST_CODE_CAMERA == requestCode) {
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                if (null != thumbnail) {
-                    //round thumbnail bitmap
-                    thumbnail = ViewUtils.getRoundedCornerBitmap(thumbnail);
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                    File bitmapPath = new File(Environment
-                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                            System.currentTimeMillis()+".jpg");
-                    FileOutputStream fo;
-                    try {
-                        if (bitmapPath.createNewFile()) {
-                            fo = new FileOutputStream(bitmapPath);
-                            fo.write(bytes.toByteArray());
-                            fo.close();
-                        }
-                    } catch(IOException e) {
-                        Logger.e(TAG,e.getLocalizedMessage());
-                    }
-                }
-            } */ else if (REQUEST_CODE_EDIT == requestCode) {
+            } else if (REQUEST_CODE_EDIT == requestCode) {
                 Bundle bundle = data.getExtras();
                 if (null != bundle) {
                     boolean infoEdited = bundle.getBoolean(EditProfileActivity.KEY_INFO_EDITED);
@@ -116,31 +93,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent editProfile = new Intent(this, EditProfileActivity.class);
         editProfile.putExtra(KEY_DEVICE, device);
         startActivityForResult(editProfile, REQUEST_CODE_EDIT);
-        /*final String items[] = {"Camera","Gallery","Cancel"};
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Select photo")
-                .setCancelable(true)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (items[which]) {
-                            case "Camera":
-                                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(camera,REQUEST_CODE_CAMERA);
-                                break;
-                            case "Gallery":
-                                Intent gallery = new Intent(Intent.ACTION_PICK,
-                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                gallery.setType("image*//*");
-                                startActivityForResult(Intent.createChooser(gallery,"Choose photo"),REQUEST_CODE_GALLERY);
-                                break;
-                            case "Cancel":
-                                dialog.dismiss();
-                                break;
-                        }
-                    }
-                }).create();
-        dialog.show();*/
+
     }
 
     @Override
