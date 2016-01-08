@@ -95,17 +95,6 @@ public class MainActivity extends AppCompatActivity implements
         startActivityForResult(editProfile, REQUEST_CODE_EDIT);
 
     }
-
-    @Override
-    public void onClickLock(Device device) {
-        makeToast("lock : " + device.getDeviceName());
-    }
-
-    @Override
-    public void onClickProfile(Device device) {
-        makeToast("profile : " + device.getDeviceName());
-    }
-
     @Override
     public void onClickGoToMap(Device device) {
         makeToast("go to map : " + device.getDeviceName());

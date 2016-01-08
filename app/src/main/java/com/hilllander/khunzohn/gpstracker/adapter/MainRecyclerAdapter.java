@@ -81,25 +81,11 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 onClickListener.onClickEdit(device);
             }
         });
-            /*lock onclick*/
-        ((MainRecyclerViewHolder) holder).ibLock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClickLock(device);
-            }
-        });
             /*go to map onclick*/
         ((MainRecyclerViewHolder) holder).tvGoToMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClickGoToMap(device);
-            }
-        });
-            /*profile pic onclick*/
-        ((MainRecyclerViewHolder) holder).deviceProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClickProfile(device);
             }
         });
         if (device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
@@ -124,10 +110,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public interface OnDeviceOnClickListener {
         void onClickEdit(Device device);
-
-        void onClickLock(Device device);
-
-        void onClickProfile(Device device);
 
         void onClickGoToMap(Device device);
     }
