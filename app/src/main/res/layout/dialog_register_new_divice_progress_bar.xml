@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/grey"
+    android:orientation="horizontal"
+    android:padding="@dimen/cardview_margin">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <mm.technomation.mmtext.MMTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:text="@string/label_connecting_gps"
+        android:textColor="@color/indigo_700" />
+</LinearLayout>

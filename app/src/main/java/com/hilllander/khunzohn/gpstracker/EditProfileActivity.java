@@ -50,11 +50,13 @@ public class EditProfileActivity extends AppCompatActivity {
     public static final String TITLE_CHANGE_TYPE = "Change type";
     public static final String KEY_DEVICE = "key for device";
     public static final String KEY_INFO_EDITED = "key for info edited";
+    public static final String KEY_RETURNED_DEVICE = "key_returned_from_edit_sim_nuber";
     private static final String TAG = Logger.generateTag(EditProfileActivity.class);
     private static final int REQUEST_EDIT_NAME = 456;
     private static final int REQUEST_EDIT_TYPE = 421;
     private static final int REQUEST_CAMERA = 789;
     private static final int REQUEST_GALLERY = 968;
+    private static final int REQUEST_EDIT_SIM = 4521;
     private TextView tvNameValue;
     private ImageButton ibEditName;
     private TextView tvTypeValue;
@@ -121,7 +123,9 @@ public class EditProfileActivity extends AppCompatActivity {
         ibEditSimNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent sim = new Intent(EditProfileActivity.this, EditSimNumActivity.class);
+                sim.putExtra(KEY_DEVICE, device);
+                startActivityForResult(sim, REQUEST_EDIT_SIM);
             }
         });
         ibEditAuthorization = (ImageButton) findViewById(R.id.ibEditAuthorization);
@@ -254,10 +258,10 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (RESULT_OK == resultCode) {
             Bundle bundle = data.getExtras();
-            if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode) {
+            if (REQUEST_EDIT_NAME == requestCode || REQUEST_EDIT_TYPE == requestCode || REQUEST_EDIT_SIM == requestCode) {
 
                 if (null != bundle) {
-                    device = (Device) bundle.getSerializable(EditBasicInfoActivity.KEY_RETURNED_DEVICE);
+                    device = (Device) bundle.getSerializable(KEY_RETURNED_DEVICE);
                     if (null != device)
                         setValue(device);
                     infoEdited = true;

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:orientation="horizontal"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:id="@+id/cancel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:background="@color/deep_purple_500"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/cardview_margin"
+            android:layout_marginStart="@dimen/cardview_margin"
+            android:contentDescription="@string/close_button_content_description"
+            android:src="@drawable/ic_close_white_24dp" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/cardview_margin"
+            android:layout_marginStart="@dimen/cardview_margin"
+            android:text="@string/button_cancel"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/grey" />
+
+    <LinearLayout
+        android:id="@+id/ok"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:background="@color/deep_purple_500"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/cardview_margin"
+            android:layout_marginStart="@dimen/cardview_margin"
+            android:contentDescription="@string/close_button_content_description"
+            android:src="@drawable/ic_done_white_24dp" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/cardview_margin"
+            android:layout_marginStart="@dimen/cardview_margin"
+            android:text="@string/button_ok"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+</LinearLayout>

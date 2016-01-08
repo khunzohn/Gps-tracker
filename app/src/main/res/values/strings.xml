@@ -177,4 +177,5 @@
     <string name="label_delete_this_device">Delete this device</string>
     <string name="delete_message">Device will be deleted from database</string>
     <string name="delete_button_content_description">delete this device</string>
+    <string name="label_connecting_gps">connecting GPS...</string>
 </resources>

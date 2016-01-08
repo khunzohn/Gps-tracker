@@ -21,10 +21,9 @@ import mm.technomation.mmtext.MMEditText;
 import mm.technomation.mmtext.MMTextView;
 
 /**
- * Created by khunzohn on 1/6/16.
+ *Created by khunzohn on 1/6/16.
  */
 public class EditBasicInfoActivity extends AppCompatActivity {
-    public static final String KEY_RETURNED_DEVICE = "key for returned device";
     private static final String TAG = Logger.generateTag(EditBasicInfoActivity.class);
     private static final int NAME = 0;
     private static final int TYPE = 1;
@@ -145,7 +144,7 @@ public class EditBasicInfoActivity extends AppCompatActivity {
                 Logger.e(TAG, e.getLocalizedMessage());
             }
             Intent returnedIntent = new Intent();
-            returnedIntent.putExtra(KEY_RETURNED_DEVICE, deviceUpdated);
+            returnedIntent.putExtra(EditProfileActivity.KEY_RETURNED_DEVICE, deviceUpdated);
             setResult(RESULT_OK, returnedIntent);
             finish();
         }
