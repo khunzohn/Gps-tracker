@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/pink_500</color>
-    <color name="colorPrimaryDark">@color/pink_700</color>
-    <color name="colorAccent">@color/indigo_500</color>
+    <color name="colorPrimary">@color/green_500</color>
+    <color name="colorPrimaryDark">@color/green_700</color>
+    <color name="colorAccent">@color/blue_500</color>
     <color name="grey">#ddd</color>
     <color name="indigo_500">#3f51b5</color>
     <color name="indigo_700">#303f9f</color>
@@ -29,4 +29,8 @@
     <color name="accent_material_light">#152496</color>
     <color name="indigo_alpha">#ab3f51b5</color>
     <color name="blue_alpha">#d950be8b</color>
+    <color name="green_500">#4caf50</color>
+    <color name="green_700">#388e3c</color>
+    <color name="pink_400">#f50057</color>
+    <color name="yellow_400">#ffee58</color>
 </resources>

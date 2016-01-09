@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue_300">
+        android:background="@color/indigo_700">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/deviceProfile"
@@ -25,7 +25,7 @@
             android:layout_margin="@dimen/text_view_padding"
             android:contentDescription="@string/profile_image_content_description"
             android:src="@drawable/ic_add_white_24dp"
-            app:civ_border_color="@color/indigo_500"
+            app:civ_border_color="@android:color/white"
             app:civ_border_width="2dp"
             app:civ_fill_color="@color/grey" />
 
@@ -33,9 +33,9 @@
             android:id="@+id/deviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@id/deviceProfile"
-            android:layout_toRightOf="@id/deviceProfile"
+            android:layout_alignTop="@+id/deviceProfile"
+            android:layout_toEndOf="@+id/tvPlace"
+            android:layout_toRightOf="@+id/tvPlace"
             android:paddingTop="@dimen/text_view_padding"
             android:textColor="@android:color/white"
             android:textSize="@dimen/large_text"
@@ -45,10 +45,9 @@
             android:id="@+id/simNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/deviceName"
+            android:layout_alignStart="@+id/deviceName"
             android:layout_below="@+id/deviceName"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/deviceProfile"
-            android:layout_toRightOf="@+id/deviceProfile"
             android:textColor="@android:color/white"
             android:textSize="@dimen/small_text"
             tools:text="+90865889765" />
@@ -57,10 +56,10 @@
             android:id="@+id/authorization"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/simNumber"
-            android:layout_marginLeft="@dimen/circle_image_size"
-            android:layout_marginStart="@dimen/circle_image_size"
-            android:textColor="@color/red_200"
+            android:layout_alignBottom="@+id/deviceProfile"
+            android:layout_alignLeft="@+id/simNumber"
+            android:layout_alignStart="@+id/simNumber"
+            android:textColor="@color/yellow_400"
             android:textSize="@dimen/small_text"
             tools:text="un-authorization" />
 
@@ -115,7 +114,7 @@
                 android:layout_alignTop="@+id/tvLatitude"
                 android:layout_toEndOf="@id/tvLatitude"
                 android:layout_toRightOf="@+id/tvLatitude"
-                android:textColor="@color/red_200"
+                android:textColor="@color/yellow_400"
                 android:textSize="@dimen/small_text"
                 tools:text="45.12334" />
             <mm.technomation.mmtext.MMTextView
@@ -139,7 +138,7 @@
                 android:layout_marginStart="@dimen/text_view_padding"
                 android:layout_toEndOf="@id/tvLongitude"
                 android:layout_toRightOf="@+id/tvLongitude"
-                android:textColor="@color/red_200"
+                android:textColor="@color/yellow_400"
                 android:textSize="@dimen/small_text"
                 tools:text="45.12334" />
         </RelativeLayout>
@@ -186,7 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/tvPlace"
+            android:layout_alignTop="@+id/iClock"
             android:padding="@dimen/text_view_padding"
             android:text="@string/label_gps_time_last_tracked"
             android:textColor="@android:color/white" />
@@ -195,7 +194,7 @@
             android:id="@+id/iClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/circle_image_size"
+            android:layout_alignTop="@+id/tvPlace"
             android:layout_toLeftOf="@+id/tvLastTrackedTime"
             android:layout_toStartOf="@+id/tvLastTrackedTime"
             android:contentDescription="@string/image_clock_content_description"
@@ -206,9 +205,9 @@
             android:id="@+id/tvDateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/relativeLayout"
-            android:layout_toEndOf="@+id/iClock"
-            android:layout_toRightOf="@+id/iClock"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvLastTrackedTime"
             android:padding="@dimen/text_view_padding"
             android:textColor="@color/pink_200"
             android:textSize="@dimen/small_text"
