@@ -62,8 +62,9 @@
     <!--//TODO replace with unicode-->
     <string name="button_retry">ျပန္ျကိုးစားမယ္</string>
     <!--//TODO replace with unicode-->
-    <string name="label_action_skip"><u>ေနာက္မှ >></u></string>
+    <string name="label_action_skip"><u>ကျော်မယ် >></u></string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="dialog_title_tracking">ခြေရာခံနေသည်</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

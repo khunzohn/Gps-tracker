@@ -16,6 +16,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/cardview_margin"
         android:layout_marginStart="@dimen/cardview_margin"
-        android:text="@string/label_connecting_gps"
+        android:text="@string/dialog_title_connecting"
         android:textColor="@color/indigo_700" />
 </LinearLayout>

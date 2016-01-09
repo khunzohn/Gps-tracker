@@ -209,7 +209,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvLastTrackedTime"
             android:padding="@dimen/text_view_padding"
-            android:textColor="@color/pink_200"
+            android:textColor="@color/yellow_400"
             android:textSize="@dimen/small_text"
             tools:text="12/02/16 11:32:13" />
 

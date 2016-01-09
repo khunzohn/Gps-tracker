@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_margin="@dimen/cardview_margin"
+        android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/blue_alpha"
         android:padding="@dimen/text_view_padding">
 
