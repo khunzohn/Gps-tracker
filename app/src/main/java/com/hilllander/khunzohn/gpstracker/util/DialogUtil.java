@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 /**
- * Created by khunzohn on 1/8/16.
+ *Created by khunzohn on 1/8/16.
  */
 public class DialogUtil {
     private static AlertDialog progressDialog;

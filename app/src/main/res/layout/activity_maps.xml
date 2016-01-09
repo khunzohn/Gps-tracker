@@ -1,7 +1,158 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hilllander.khunzohn.gpstracker.MapsActivity" />
+    android:fitsSystemWindows="true">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.hilllander.khunzohn.gpstracker.MapsActivity" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_margin="@dimen/cardview_margin"
+        android:background="@color/blue_alpha"
+        android:padding="@dimen/text_view_padding">
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="@dimen/text_view_padding"
+            android:text="Farari"
+            android:textColor="@android:color/white"
+            tools:text="device name" />
+
+        <ImageView
+            android:id="@+id/ivPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:contentDescription="@string/image_place_content_description"
+            android:src="@drawable/ic_place_white_24dp" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/tvPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivPlace"
+            android:layout_toEndOf="@+id/ivPlace"
+            android:layout_toRightOf="@+id/ivPlace"
+            android:text="@string/label_gps_place"
+            android:textColor="@android:color/white" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/tvLatitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ivPlace"
+            android:text="@string/label_gps_latitude"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/small_text" />
+
+        <TextView
+            android:id="@+id/tvLatValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvLongValue"
+            android:layout_alignStart="@+id/tvLongValue"
+            android:layout_below="@+id/ivPlace"
+
+            android:text="20.3487464"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/small_text" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/tvLongitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvLatitude"
+            android:text="@string/label_gps_longitude"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/small_text" />
+
+        <TextView
+            android:id="@+id/tvLongValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tvLongitude"
+            android:layout_marginLeft="@dimen/text_view_padding"
+            android:layout_marginStart="@dimen/text_view_padding"
+            android:layout_toEndOf="@+id/tvLongitude"
+            android:layout_toRightOf="@+id/tvLongitude"
+            android:text="20.3487464"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/small_text" />
+
+        <ImageView
+            android:id="@+id/ivTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivPlace"
+            android:layout_marginEnd="@dimen/text_view_padding"
+            android:layout_marginRight="@dimen/text_view_padding"
+            android:layout_toLeftOf="@+id/tvLastTrackedTime"
+            android:layout_toStartOf="@+id/tvLastTrackedTime"
+            android:contentDescription="@string/image_clock_content_description"
+            android:src="@drawable/ic_access_time_white_24dp" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/tvLastTrackedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvPlace"
+            android:text="@string/label_gps_time_last_tracked"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tvDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvLatValue"
+            android:layout_below="@+id/tvLastTrackedTime"
+            android:text="45:56:22"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/small_text"
+            tools:text="45:45:45" />
+
+        <mm.technomation.mmtext.MMTextView
+            android:id="@+id/sync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvDateTime"
+            android:layout_marginTop="@dimen/text_view_padding"
+            android:clickable="true"
+            android:text="@string/label_action_locate_gps"
+            android:textColor="@color/locate_gps_background_selector" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/sync"
+            android:layout_marginEnd="@dimen/text_view_padding"
+            android:layout_marginRight="@dimen/text_view_padding"
+            android:layout_toLeftOf="@+id/sync"
+            android:layout_toStartOf="@+id/sync"
+            android:contentDescription="@string/refresh_image_content_description"
+            android:src="@drawable/ic_refresh_white_18dp" />
+
+    </RelativeLayout>
+</FrameLayout>

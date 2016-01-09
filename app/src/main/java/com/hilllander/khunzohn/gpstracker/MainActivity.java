@@ -24,6 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements
         MainRecyclerAdapter.OnDeviceOnClickListener {
     public static final String KEY_DEVICE = "key for device";
+    public static final String KEY_RETURNED_DEVICE = "key_returned_device";
     private static final String TAG = Logger.generateTag(MainActivity.class);
     private static final int REQUEST_CODE_CONNECT = 505;
     private static final int REQUEST_CODE_EDIT = 456;
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
             } else if (REQUEST_CODE_MAP == requestCode) {
-
+                GetAllDevicesFromDb getAllDevicesFromDb = new GetAllDevicesFromDb(this);
+                getAllDevicesFromDb.execute();
             }
         }
     }

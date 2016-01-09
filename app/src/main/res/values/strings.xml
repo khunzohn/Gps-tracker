@@ -54,7 +54,7 @@
     <string name="label_action_change">ပြောင်းမယ်</string>
     <string name="label_toggle_action_authorized">ဤဖုန်းဖြင့်သာခြေရာခံနိုင်သည်</string>
     <string name="label_toggle_action_un_authorized"> အခြားဖုန်း များဖြင့်လည်း ခြေရာခံနိုင်သည် </string>
-    <string name="label_action_locate_gps">အခုဘယ်မှာလဲ</string>
+    <string name="label_action_locate_gps">အခုဘယ်မှာလဲ >></string>
     <string name="label_with_you">အသင်နှင့်</string>
     <string name="label_located_at_meters_away">မီတာ အကွာတွင်ရှိပါသည်</string>
     <!--//TODO replace with unicode-->
@@ -181,4 +181,5 @@
     <string name="label_enter_authorizing">Enter authorizing number</string>
     <string name="label_no_password">လျို့ဝှက်ကုဒ်မရှိပါ</string>
     <string name="label_secured_with_password">လျို့ဝှက်ကုဒ်ရှိပါသည</string>
+    <string name="refresh_image_content_description">refresh image</string>
 </resources>
