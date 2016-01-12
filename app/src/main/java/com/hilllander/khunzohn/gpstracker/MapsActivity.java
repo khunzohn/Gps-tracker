@@ -21,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
-import com.hilllander.khunzohn.gpstracker.util.DialogUtil;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.NetworkUtil;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
@@ -45,6 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Timer statusChecker;
     private int checkCount = 0;
     private int connectorFlag = ConnectActivity.TEXT;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +163,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showProgress(boolean visible) {
-        DialogUtil.showProgressBar(this, R.layout.dialog_register_new_divice_progress_bar, visible);
+        if (progressDialog == null) {
+            progressDialog = new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setView(R.layout.dialog_register_new_divice_progress_bar)
+                    .create();
+        }
+        if (visible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
     }
 
     private void setValue(Device device) {
@@ -174,6 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .bearing(300)
                 .tilt(50)
                 .build();
+
         tvLatValue.setText(String.valueOf(lat));
         tvLongVal.setText(String.valueOf(lon));
         name.setMyanmarText(device.getDeviceName());

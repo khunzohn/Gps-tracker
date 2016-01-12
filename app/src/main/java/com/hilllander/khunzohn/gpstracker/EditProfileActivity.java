@@ -146,17 +146,18 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
         ibProfile = (CircleImageView) findViewById(R.id.ibProfile);
-        if (!device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
+        if (null == device.getPhotoUrl() || device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
+            ibProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
+
+        } else {
             String photoUrl = device.getPhotoUrl();
             Bitmap bm = BitmapUtil.scaledBitmap(photoUrl);
             if (null != bm) {
                 ibProfile.setImageBitmap(bm);
             } else {
                 Logger.e(TAG, "Can't decode bitmap from file path");
-                ibProfile.setImageResource(R.drawable.default_device_profile_pic);
+                ibProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
             }
-        } else {
-            ibProfile.setImageResource(R.drawable.default_device_profile_pic);
         }
         ibProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,8 +210,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }).setView(group, 16, 16, 16, 16)
                 .create();
         dialog.show();
-
-
     }
 
     private void openGallery() {

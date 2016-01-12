@@ -10,6 +10,9 @@ import android.telephony.SmsMessage;
 import com.hilllander.khunzohn.gpstracker.GlobalApplication;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by khunzohn 1/1/16.
  */
@@ -49,7 +52,7 @@ public class USSDReciever extends BroadcastReceiver {
                                 messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                             }
                             sender = messages[i].getOriginatingAddress();
-                            smsBody = messages[i].getMessageBody();
+                            smsBody += messages[i].getMessageBody();
                         }
                     } catch (Exception e) {
                         Logger.e(TAG, e.getMessage());
@@ -116,14 +119,25 @@ public class USSDReciever extends BroadcastReceiver {
     }
 
     private String[] extractLatLon(String smsBody) {
+        Logger.d(TAG, smsBody);
         //make sure smsBody starts with "http"
-        if (smsBody.startsWith("http")) {
-            String url = smsBody.split(" ")[0];
-            String rawLatLon = url.split("=")[1];
-            String rawLat = rawLatLon.split(",")[0];
-            String rawLon = rawLatLon.split(",")[1];
-            Logger.d(TAG, "raw lat & lon : " + rawLat + " " + rawLon);
-            return new String[]{rawLat.substring(1), rawLon.substring(1)};
+        if (isGeoSMS(smsBody)) {
+            String strUrl = smsBody.split(" ")[0];
+            try {
+                URL url = new URL(strUrl);
+
+
+                Logger.d(TAG, strUrl);
+                String rawLatLon = url.getQuery();
+                Logger.d(TAG, rawLatLon);
+                String rawLat = rawLatLon.split(",")[0];
+                String rawLon = rawLatLon.split(",")[1];
+                Logger.d(TAG, "raw lat & lon : " + rawLat + " " + rawLon);
+                return new String[]{rawLat.substring(3), rawLon.substring(1)};
+            } catch (MalformedURLException e) {
+                Logger.e(TAG, e.getMessage());
+            }
+
         }
         Logger.e(TAG, "Something went wrong while extracting Lat Lon");
         return new String[]{"0", "0"};
@@ -141,11 +155,23 @@ public class USSDReciever extends BroadcastReceiver {
             type = MESSAGE_TYPE_ADMIN_OK;
         else if (smsBody.startsWith("no admin"))
             type = MESSAGE_TYPE_NO_ADMIN_OK;
-        else if (smsBody.contains("http:"))
+        else if (isGeoSMS(smsBody))
             type = MESSAGE_TYPE_GEO_DATA;
         else type = -1; //unknown type
         Logger.d(TAG, "Sms type : " + type);
         return type;
+    }
+
+    private boolean isGeoSMS(String smsBody) {
+        String splited[] = smsBody.split(" ");
+        try {
+            if (splited[4].startsWith("IMEI:"))
+                Logger.d(TAG, "index [4] is starts with IMEI:");
+            return true;
+        } catch (IndexOutOfBoundsException e) {
+            Logger.e(TAG, e.getLocalizedMessage());
+            return false;
+        }
     }
 
     private boolean isRegisteredAddress(String senderAddress) {

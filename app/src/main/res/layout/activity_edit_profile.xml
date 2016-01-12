@@ -307,9 +307,8 @@
         android:contentDescription="@string/profile_image_content_description"
         android:src="@drawable/ic_add_white_24dp"
         app:civ_border_color="@android:color/white"
-        app:civ_border_overlay="true"
         app:civ_border_width="2dp"
-        app:civ_fill_color="@color/blue_300"
+        app:civ_fill_color="@color/grey"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

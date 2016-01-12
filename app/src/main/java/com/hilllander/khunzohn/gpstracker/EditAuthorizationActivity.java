@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +44,7 @@ public class EditAuthorizationActivity extends AppCompatActivity implements USSD
     private boolean radioCheckedGotChanged = false;
     private boolean authorizationNumGotChanged = false;
     private Timer statusChecker;
+    private AlertDialog progressDialog;
     private int checkCount = 0;
 
     @Override
@@ -188,7 +190,17 @@ public class EditAuthorizationActivity extends AppCompatActivity implements USSD
     }
 
     private void showProgress(boolean visible) {
-        DialogUtil.showProgressBar(this, R.layout.dialog_register_new_divice_progress_bar, visible);
+        if (progressDialog == null) {
+            progressDialog = new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setView(R.layout.dialog_register_new_divice_progress_bar)
+                    .create();
+        }
+        if (visible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
     }
 
     @Override
@@ -222,7 +234,6 @@ public class EditAuthorizationActivity extends AppCompatActivity implements USSD
 
     @Override
     public void onGeoDataReceived(String lat, String lon, String date, String time, String sender) {
-
     }
 
     private class UpdateDeviceToDb extends AsyncTask<Device, Void, Device> {

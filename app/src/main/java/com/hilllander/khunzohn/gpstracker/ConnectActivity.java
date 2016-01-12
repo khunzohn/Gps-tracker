@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
+import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
 import com.hilllander.khunzohn.gpstracker.fragment.ConnectionWarningFragment;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
@@ -51,6 +53,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     private View progressBarLayout;
     private Device createdDevice;
     private boolean firstAppLaunch;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,8 +238,17 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     }
 
     private void showProgressBar(final boolean visible) {
-        final String message = getString(R.string.dialog_message_connecting);
-        ViewUtils.showProgressBar(this, progressBarLayout, message, visible);
+        if (progressDialog == null) {
+            progressDialog = new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setView(R.layout.dialog_register_new_divice_progress_bar)
+                    .create();
+        }
+        if (visible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
     }
 
     private void showErrorDialog() {
@@ -269,6 +281,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     public void onBeginOkReceived(String sender) {
         Logger.d(TAG, "begin ok received");
         USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD, connectorFlag);
+        Logger.d(TAG, "query sent.");
     }
 
     @Override
@@ -307,9 +320,9 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
             device.setDeviceType(Device.DEFAULT_TYPE);
             device.setPassword(USSD.DEAFULT_PASSWORD);
             device.setAuthorization(Device.UN_AUTHORIZED);
+            device.setPhotoUrl(DeviceTable.DEFAULT_PHOTO_URL);
             CreateDeviceAsync createDevice = new CreateDeviceAsync(this);
             createDevice.execute(device);
-
         } else {
             makeToast("empty geo received!");
         }
@@ -365,7 +378,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
                 connectionHasSucceeded = true;
                 showProgressBar(false);
             }
-
         }
     }
 }

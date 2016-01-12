@@ -1,7 +1,6 @@
 package com.hilllander.khunzohn.gpstracker.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
@@ -9,8 +8,6 @@ import android.support.v7.app.AlertDialog;
  *Created by khunzohn on 1/8/16.
  */
 public class DialogUtil {
-    private static AlertDialog progressDialog;
-
     public static void showErrorDialog(final Activity activity, String title, String message, String negative, String positive) {
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setCancelable(false)
@@ -30,19 +27,5 @@ public class DialogUtil {
                 })
                 .create();
         dialog.show();
-    }
-
-    public static void showProgressBar(Context context, int resId, boolean visible) {
-        if (null == progressDialog) {
-            progressDialog = new AlertDialog.Builder(context)
-                    .setCancelable(false)
-                    .setView(resId)
-                    .create();
-        }
-        if (visible) {
-            progressDialog.show();
-        } else {
-            progressDialog.dismiss();
-        }
     }
 }

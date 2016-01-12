@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -27,7 +28,7 @@ import java.util.TimerTask;
 import mm.technomation.mmtext.MMTextView;
 
 /**
- * Created by khunzohn on 1/8/16.
+ *Created by khunzohn on 1/8/16.
  */
 public class EditSimNumActivity extends AppCompatActivity implements USSDReciever.OnMessageRecieveListener {
     private static final String TAG = Logger.generateTag(EditSimNumActivity.class);
@@ -37,6 +38,7 @@ public class EditSimNumActivity extends AppCompatActivity implements USSDRecieve
     private Device device;
     private int checkCount = 0;
     private Timer statusChecker;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +135,17 @@ public class EditSimNumActivity extends AppCompatActivity implements USSDRecieve
     }
 
     private void showProgressBar(boolean visible) {
-        DialogUtil.showProgressBar(this, R.layout.dialog_register_new_divice_progress_bar, visible);
+        if (progressDialog == null) {
+            progressDialog = new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setView(R.layout.dialog_register_new_divice_progress_bar)
+                    .create();
+        }
+        if (visible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
     }
 
     @Override

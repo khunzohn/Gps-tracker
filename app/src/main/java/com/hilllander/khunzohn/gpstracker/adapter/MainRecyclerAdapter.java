@@ -65,10 +65,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
             ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_white_24dp);
         }
-        if (device.getAuthorization().equals(Device.AUTHORIZED)) {
-            ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_authorized));
-        } else {
+        if (device.getAuthorization().equals(Device.UN_AUTHORIZED)) {
             ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_un_authorized));
+        } else {
+            ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_authorized));
         }
         ((MainRecyclerViewHolder) holder).tvLatValue.setText(String.valueOf(device.getLatitude()));
         ((MainRecyclerViewHolder) holder).tvLongValue.setText(String.valueOf(device.getLongitude()));
@@ -88,7 +88,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 onClickListener.onClickGoToMap(device);
             }
         });
-        if (device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
+        if (null == device.getPhotoUrl() || device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
             ((MainRecyclerViewHolder) holder).deviceProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_white_24dp));
         } else {
             String url = device.getPhotoUrl();
