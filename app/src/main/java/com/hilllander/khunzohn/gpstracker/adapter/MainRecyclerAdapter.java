@@ -61,9 +61,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((MainRecyclerViewHolder) holder).deviceName.setText(device.getDeviceName());
         ((MainRecyclerViewHolder) holder).simNumber.setText(device.getSimNumber());
         if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
-            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_open_white_24dp);
+            //TODO un comment the following codes once password feature's been implemented
+//            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_open_white_24dp);
         } else {
-            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_white_24dp);
+//            ((MainRecyclerViewHolder) holder).ibLock.setBackgroundResource(R.drawable.ic_lock_white_24dp);
         }
         if (device.getAuthorization().equals(Device.UN_AUTHORIZED)) {
             ((MainRecyclerViewHolder) holder).authorization.setMyanmarText(context.getString(R.string.label_toggle_action_un_authorized));

@@ -153,8 +153,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:background="@color/transparent"
-            android:contentDescription="@string/lock_image_button_content_description"
-            android:src="@drawable/ic_lock_open_white_24dp" />
+            android:contentDescription="@string/lock_image_button_content_description" />
 
         <ImageButton
             android:id="@+id/ibEdit"

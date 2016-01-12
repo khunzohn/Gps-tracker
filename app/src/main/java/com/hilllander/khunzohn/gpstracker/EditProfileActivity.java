@@ -28,7 +28,6 @@ import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.database.table.DeviceTable;
 import com.hilllander.khunzohn.gpstracker.util.BitmapUtil;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
-import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -66,8 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageButton ibEditSimNumber;
     private MMTextView tvAuthorizationValue;
     private ImageButton ibEditAuthorization;
-    private MMTextView tvPasswordValue;
-    private ImageButton ibEditPassword, deleteDevice;
+    private ImageButton deleteDevice;
     private CircleImageView ibProfile;
     private Device device;
     private boolean infoEdited = false;
@@ -87,7 +85,6 @@ public class EditProfileActivity extends AppCompatActivity {
         tvTypeValue = (TextView) findViewById(R.id.tvTypeValue);
         tvSimnumberValue = (MMTextView) findViewById(R.id.tvSimnumberValue);
         tvAuthorizationValue = (MMTextView) findViewById(R.id.tvAuthorizationValue);
-        tvPasswordValue = (MMTextView) findViewById(R.id.tvPasswordValue);
         device = new Device();
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
@@ -138,13 +135,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 startActivityForResult(authorization, REQUEST_EDIT_AUTHORIZATION);
             }
         });
-        ibEditPassword = (ImageButton) findViewById(R.id.ibEditPassword);
-        ibEditPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
         ibProfile = (CircleImageView) findViewById(R.id.ibProfile);
         if (null == device.getPhotoUrl() || device.getPhotoUrl().equals(DeviceTable.DEFAULT_PHOTO_URL)) {
             ibProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
@@ -254,11 +245,6 @@ public class EditProfileActivity extends AppCompatActivity {
             tvAuthorizationValue.setMyanmarText(this.getString(R.string.label_toggle_action_authorized));
         }
         tvSimnumberValue.setMyanmarText(device.getSimNumber());
-        if (device.getPassword().equals(USSD.DEAFULT_PASSWORD)) {
-            tvPasswordValue.setMyanmarText(this.getString(R.string.label_no_password));
-        } else {
-            tvPasswordValue.setMyanmarText(this.getString(R.string.label_secured_with_password));
-        }
     }
 
     @Override
