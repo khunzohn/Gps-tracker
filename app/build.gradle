@@ -28,9 +28,11 @@ android {
         debug {
             resValue "string", "google_maps_api_key", "AIzaSyCOeKXHAYPNFV2LQYb0HdsTFMNZ1ymo3c8"
             versionNameSuffix "-debug-" + buildTime()
+            debuggable true
+            applicationIdSuffix ".debug"
         }
         release {
-            resValue "string", "google_maps_api_key", "//TODO replage with release api key"
+            resValue "string", "google_maps_api_key", "AIzaSyB5RlDGEeg_HC_UNSjsh-iZxPUQvwDdGfg"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -59,9 +61,6 @@ dependencies {
     compile supportDependencies.design
     compile 'com.google.android.gms:play-services:8.4.0'
     compile project(':mmtext')
-    compile('com.github.ozodrukh:CircularReveal:1.1.1@aar') {
-        transitive = true;
-    }
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'de.hdodenhof:circleimageview:2.0.0'
 
