@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/green_alpha"
+            android:background="@color/green_500"
             android:padding="@dimen/text_view_padding">
 
             <mm.technomation.mmtext.MMTextView
