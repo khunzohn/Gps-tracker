@@ -2,9 +2,12 @@ package com.hilllander.khunzohn.gpstracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -23,6 +26,7 @@ import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.NetworkUtil;
+import com.hilllander.khunzohn.gpstracker.util.Telephony;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
@@ -32,26 +36,29 @@ import java.util.TimerTask;
 
 import mm.technomation.mmtext.MMTextView;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, USSDReciever.OnMessageRecieveListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        USSDReciever.OnMessageRecieveListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = Logger.generateTag(MapsActivity.class);
     public static CameraPosition GPS;
     private GoogleMap mMap;
     private Device device;
     private float lat, lon;
-    private MMTextView name, syn;
+    private MMTextView name;
     private TextView tvLatValue, tvLongVal, tvDateTime;
     private Timer statusChecker;
     private int checkCount = 0;
     private int connectorFlag = ConnectActivity.TEXT;
     private AlertDialog progressDialog;
-
+    private TabLayout tabLayout;
+    private String STANDARD = "Standard";
+    private String SATELLITE = "Satellite";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         name = (MMTextView) findViewById(R.id.name);
-        syn = (MMTextView) findViewById(R.id.sync);
+        MMTextView syn = (MMTextView) findViewById(R.id.sync);
         tvLatValue = (TextView) findViewById(R.id.tvLatValue);
         tvLongVal = (TextView) findViewById(R.id.tvLongValue);
         tvDateTime = (TextView) findViewById(R.id.tvDateTime);
@@ -60,6 +67,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (null != device) {
             setValue(device);
         }
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.addTab(tabLayout.newTab().setText(STANDARD));
+        tabLayout.addTab(tabLayout.newTab().setText(SATELLITE));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if (isMapReady()) {
+                    if (null != tab.getText()) {
+                        String type = tab.getText().toString();
+                        if (type.equals(STANDARD)) { // standard tab
+                            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        } else if (type.equals(SATELLITE)) { // satellite tab
+                            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                        }
+                    }
+
+                }
+            }
+
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        tabLayout.getTabAt(0).select();
+
         ViewUtils.setStatusBarTint(this, R.color.blue_700);
         if (!NetworkUtil.isNetworkAvailable(this)) {
             Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
@@ -74,6 +113,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    private boolean isMapReady() {
+        return mMap != null;
     }
 
     private void syncLocation() {
@@ -107,8 +150,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void startSync(int connectorFlag) {
         showProgress(true);
-        USSD.queryGeo(device.getSimNumber(), device.getPassword(), connectorFlag);
+        switch (connectorFlag) {
+            case ConnectActivity.PHONE:
+                Telephony.queryGeo(MapsActivity.this, device.getSimNumber());
+                break;
+            case ConnectActivity.TEXT:
+                USSD.queryGeo(device.getSimNumber(), device.getPassword());
+                break;
+        }
         startCheckStatusTimer();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+    }
+
+
+    private boolean isPerssionGranted(String[] permissions, int[] grantResults, String permision) {
+        for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(permision)) {
+                return grantResults[i] == PackageManager.PERMISSION_GRANTED;
+            }
+        }
+        return false;
     }
 
     private void startCheckStatusTimer() {
@@ -128,7 +193,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void run() {
                 checkCount++;
-                if (checkCount > 20) {
+                if (checkCount > 20) { //1 minutes
                     statusChecker.cancel();
                     error.post(showError);
                 }
@@ -149,7 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startSync(connectorFlag);
+                        syncLocation();
                     }
                 })
                 .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -203,13 +268,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void moveToDevice() {
         // Add a marker in gps's position and move the camera
         LatLng gps = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(gps).title("Device is here!"));
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(GPS), 50, null);
+        if (isMapReady()) {
+            int position = tabLayout.getSelectedTabPosition();
+            if (1 == position) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            } else if (0 == position) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            }
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(gps).title("Device is here!"));
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(GPS), 50, null);
+        }
     }
 
     @Override
     public void onBeginOkReceived(String sender) {
-
     }
 
     @Override
@@ -290,9 +363,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (null != updatedDevice) {
                 showProgress(false);
                 device = updatedDevice;
-                statusChecker.cancel();
+                if (null != statusChecker)
+                    statusChecker.cancel();
                 setResult(RESULT_OK);
             }
         }
     }
+
 }

@@ -26,11 +26,11 @@
     <color name="blue_500">#2196f3</color>
     <color name="blue_700">#1976d2</color>
     <color name="blue_300">#64b5f6</color>
-    <color name="accent_material_light">#152496</color>
     <color name="indigo_alpha">#ab3f51b5</color>
-    <color name="blue_alpha">#d950be8b</color>
+    <color name="green_alpha">#dc50be8b</color>
     <color name="green_500">#4caf50</color>
     <color name="green_700">#388e3c</color>
     <color name="pink_400">#f50057</color>
     <color name="yellow_400">#ffee58</color>
+    <color name="light_green_alpha">#d375c49f</color>
 </resources>

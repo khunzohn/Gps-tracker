@@ -167,7 +167,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
                     break;
             }
         } else {
-            USSD.queryGeo(num, USSD.DEAFULT_PASSWORD, connectorFlag);
+            USSD.queryGeo(num, USSD.DEAFULT_PASSWORD);
             Logger.d(TAG, "query geo sent!");
         }
         final Handler errorDialogShower = new Handler();
@@ -280,7 +280,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     @Override
     public void onBeginOkReceived(String sender) {
         Logger.d(TAG, "begin ok received");
-        USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD, connectorFlag);
+        USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD);
         Logger.d(TAG, "query sent.");
     }
 

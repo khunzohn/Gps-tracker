@@ -11,13 +11,20 @@
         android:layout_height="match_parent"
         tools:context="com.hilllander.khunzohn.gpstracker.MapsActivity" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_margin="@dimen/cardview_margin"
+        android:theme="@style/AppTheme.NoActionBar"></android.support.design.widget.TabLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_gravity="bottom"
         android:layout_margin="@dimen/cardview_margin"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/blue_alpha"
+        android:background="@color/green_alpha"
         android:padding="@dimen/text_view_padding">
 
         <mm.technomation.mmtext.MMTextView
@@ -138,8 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/tvDateTime"
-            android:layout_marginTop="@dimen/text_view_padding"
+            android:layout_alignParentTop="true"
             android:clickable="true"
             android:text="@string/label_action_locate_gps"
             android:textColor="@color/locate_gps_background_selector" />
@@ -156,4 +162,6 @@
             android:src="@drawable/ic_refresh_white_18dp" />
 
     </RelativeLayout>
+
+
 </FrameLayout>

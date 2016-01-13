@@ -183,4 +183,6 @@
     <string name="label_no_password">လျို့ဝှက်ကုဒ်မရှိပါ</string>
     <string name="label_secured_with_password">လျို့ဝှက်ကုဒ်ရှိပါသည</string>
     <string name="refresh_image_content_description">refresh image</string>
+    <string name="button_label_standard_map">Standard</string>
+    <string name="button_label_satellite_map">Satellite</string>
 </resources>
