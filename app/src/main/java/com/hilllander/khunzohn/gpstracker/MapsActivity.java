@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -56,11 +55,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int checkCount = 0;
     private int connectorFlag = ConnectActivity.TEXT;
     private AlertDialog progressDialog;
-    private TabLayout tabLayout;
     private String STANDARD = "Standard";
     private String SATELLITE = "Satellite";
     private boolean mPermissionDenied = false;
-    private LatLng myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,39 +73,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (null != device) {
             setValue(device);
         }
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText(STANDARD));
-        tabLayout.addTab(tabLayout.newTab().setText(SATELLITE));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
 
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                if (isMapReady()) {
-                    if (null != tab.getText()) {
-                        String type = tab.getText().toString();
-                        if (type.equals(STANDARD)) { // standard tab
-                            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                        } else if (type.equals(SATELLITE)) { // satellite tab
-                            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                        }
-                    }
-
-                }
-            }
-
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        tabLayout.getTabAt(0).select();
-
-        ViewUtils.setStatusBarTint(this, R.color.blue_700);
+        ViewUtils.setStatusBarTint(this, R.color.green_700);
         if (!NetworkUtil.isNetworkAvailable(this)) {
             Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
         }
@@ -284,6 +250,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         enableMyLocation();
         moveToDevice();
     }
@@ -336,12 +303,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Add a marker in gps's position and move the camera
         LatLng gps = new LatLng(lat, lon);
         if (isMapReady()) {
-            int position = tabLayout.getSelectedTabPosition();
-            if (1 == position) {
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            } else if (0 == position) {
-                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            }
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(gps).title("Device is here!"));
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(GPS), 50, null);
