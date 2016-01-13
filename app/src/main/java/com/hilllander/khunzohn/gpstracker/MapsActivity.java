@@ -1,15 +1,19 @@
 package com.hilllander.khunzohn.gpstracker;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,7 @@ import com.hilllander.khunzohn.gpstracker.database.model.Device;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.NetworkUtil;
+import com.hilllander.khunzohn.gpstracker.util.PermissionUtils;
 import com.hilllander.khunzohn.gpstracker.util.Telephony;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
@@ -36,10 +41,11 @@ import java.util.TimerTask;
 
 import mm.technomation.mmtext.MMTextView;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        USSDReciever.OnMessageRecieveListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
+        USSDReciever.OnMessageRecieveListener, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final String TAG = Logger.generateTag(MapsActivity.class);
+    private static final int REQUEST_FINE_LOCATION = 45;
     public static CameraPosition GPS;
     private GoogleMap mMap;
     private Device device;
@@ -53,6 +59,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TabLayout tabLayout;
     private String STANDARD = "Standard";
     private String SATELLITE = "Satellite";
+    private boolean mPermissionDenied = false;
+    private LatLng myLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +112,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (!NetworkUtil.isNetworkAvailable(this)) {
             Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
         }
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean isGpsAvailable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!isGpsAvailable) {
+            showEnableGpsDialog();
+        }
         syn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +127,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    private void showEnableGpsDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Enable location")
+                .setMessage("Go to setting to enable Location?")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent setting = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(setting);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
     private boolean isMapReady() {
@@ -159,21 +195,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
         }
         startCheckStatusTimer();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
-    }
-
-
-    private boolean isPerssionGranted(String[] permissions, int[] grantResults, String permision) {
-        for (int i = 0; i < permissions.length; i++) {
-            if (permissions[i].equals(permision)) {
-                return grantResults[i] == PackageManager.PERMISSION_GRANTED;
-            }
-        }
-        return false;
     }
 
     private void startCheckStatusTimer() {
@@ -262,7 +283,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMyLocationButtonClickListener(this);
+        enableMyLocation();
         moveToDevice();
+    }
+
+    private void enableMyLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            PermissionUtils.requestPermission(this, REQUEST_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else {
+            if (null != mMap) {
+                mMap.setMyLocationEnabled(true);
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (REQUEST_FINE_LOCATION != requestCode) {
+            return;
+        }
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (isMapReady()) {
+                enableMyLocation();
+            }
+        } else {
+            mPermissionDenied = true;
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPermissionDenied) {
+            // Permission was not granted, display error dialog.
+            showMissingPermissionError();
+            mPermissionDenied = false;
+        }
+    }
+
+    /**
+     * Displays a dialog with error message explaining that the location permission is missing.
+     */
+    private void showMissingPermissionError() {
+        PermissionUtils.PermissionDeniedDialog
+                .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
     private void moveToDevice() {
@@ -323,6 +390,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             Toast.makeText(this, "Something went wrong syncing geo data!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Toast.makeText(this, "Moving to my location", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     private class UpdateDeviceToDb extends AsyncTask<Device, Void, Device> {

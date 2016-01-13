@@ -89,4 +89,7 @@
     <string name="refresh_image_content_description">refresh image</string>
     <string name="button_label_standard_map">Standard</string>
     <string name="button_label_satellite_map">Satellite</string>
+    <string name="location_permission_denied">Location permission is denied!</string>
+    <string name="permission_required_toast">Location permission is required to locate the device location.</string>
+    <string name="permission_rationale_location">Location permission is required to locate  device location.</string>
 </resources>
