@@ -24,6 +24,7 @@ import com.hilllander.khunzohn.gpstracker.fragment.ConnectionWarningFragment;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 import com.hilllander.khunzohn.gpstracker.reciever.USSDReciever;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
+import com.hilllander.khunzohn.gpstracker.util.Telephony;
 import com.hilllander.khunzohn.gpstracker.util.USSD;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
@@ -40,17 +41,14 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     public static final String KEY_UP_ENABLE = "key for up enable";
     public static final String KEY_DEVICE_EXTRA = "key for device extra";
     private static final long CHECK_PERIOD = 3000;
-    private static final int MAX_CHECK_OUT = 30; //20*3000 1 min
+    private static final int MAX_CHECK_OUT = 30; //30*3000 1.5 min
     private static final String TAG = Logger.generateTag(ConnectActivity.class);
     private MMTextView tvTextConnect;
     private MMTextView tvPhoneConnect;
     private EditText etSimNum;
-    private MMTextView tvSkip;
     private boolean connectionHasSucceeded = false;
     private int checkCount;
     private int connectorFlag;
-    private MMButtonView btConnect;
-    private View progressBarLayout;
     private Device createdDevice;
     private boolean firstAppLaunch;
     private AlertDialog progressDialog;
@@ -60,7 +58,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
         GlobalApplication.setCurrentMessageReceiveListener(this);
-        progressBarLayout = findViewById(R.id.progressBarLayout);
         tvTextConnect = (MMTextView) findViewById(R.id.tvTextConnect);
         tvPhoneConnect = (MMTextView) findViewById(R.id.tvPhoneConnect);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,7 +74,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         }
         final MMTextView tvInputSimCard = (MMTextView) findViewById(R.id.tvInputSimCard);
         etSimNum = (EditText) findViewById(R.id.etSimNum);
-        tvSkip = (MMTextView) findViewById(R.id.skip);
+        MMTextView tvSkip = (MMTextView) findViewById(R.id.skip);
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +82,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
             }
         });
         ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
-        btConnect = (MMButtonView) findViewById(R.id.btConnect);
+        MMButtonView btConnect = (MMButtonView) findViewById(R.id.btConnect);
         btConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -95,7 +92,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
                 } else {
                     tvInputSimCard.setTextColor(getResources().getColor(android.R.color.white));
                     showProgressBar(true);
-                    enableComponents(false);
                     connect(num, connectorFlag);
                 }
             }
@@ -155,20 +151,20 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
     private void connect(String num, int connectorFlag) {
         Logger.d(TAG, "connector flag" + connectorFlag);
         if (firstAppLaunch) {
+            USSD.smsBegin(num);
+            Logger.d(TAG, "begin sent!");
+
+        } else {
             switch (connectorFlag) {
                 case MarketingFragments.TEXT:
-                    USSD.smsBegin(num);
-                    Logger.d(TAG, "begin sent!");
+                    USSD.queryGeo(num, USSD.DEAFULT_PASSWORD);
+                    Logger.d(TAG, "query sent!");
                     break;
                 case MarketingFragments.PHONE:
-                    //TODO replace with phone call connecting
-                    USSD.smsBegin(num);
-                    Logger.d(TAG, "begin sent!");
+                    Telephony.queryGeo(this, num);
+                    Logger.d(TAG, "Dialing to query");
                     break;
             }
-        } else {
-            USSD.queryGeo(num, USSD.DEAFULT_PASSWORD);
-            Logger.d(TAG, "query geo sent!");
         }
         final Handler errorDialogShower = new Handler();
         final Runnable show = new Runnable() {
@@ -231,12 +227,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         }
     }
 
-    private void enableComponents(boolean enable) {
-        btConnect.setEnabled(enable);
-        etSimNum.setEnabled(enable);
-        tvSkip.setEnabled(enable);
-    }
-
     private void showProgressBar(final boolean visible) {
         if (progressDialog == null) {
             progressDialog = new AlertDialog.Builder(this)
@@ -262,7 +252,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enableComponents(true);
                 errorDialog.dismiss();
                 connectLater();
             }
@@ -270,7 +259,6 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enableComponents(true);
                 errorDialog.dismiss();
             }
         });
@@ -279,9 +267,16 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
 
     @Override
     public void onBeginOkReceived(String sender) {
-        Logger.d(TAG, "begin ok received");
-        USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD);
-        Logger.d(TAG, "query sent.");
+        switch (connectorFlag) {
+            case MarketingFragments.TEXT:
+                USSD.queryGeo(sender, USSD.DEAFULT_PASSWORD);
+                Logger.d(TAG, "query sent!");
+                break;
+            case MarketingFragments.PHONE:
+                Telephony.queryGeo(this, sender);
+                Logger.d(TAG, "Dialing to query");
+                break;
+        }
     }
 
     @Override
