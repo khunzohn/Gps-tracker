@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
-    tools:context=".MarketingActivity">
+    tools:context=".InstructionsActivity">
 
 
-    <include layout="@layout/content_market" />
+    <include layout="@layout/content_instructions" />
 
 
     <LinearLayout

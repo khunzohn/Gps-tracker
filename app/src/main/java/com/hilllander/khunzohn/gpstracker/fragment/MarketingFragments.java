@@ -39,7 +39,7 @@ public class MarketingFragments extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
         int position = args.getInt(KEY_POSITION);
-        View view = inflater.inflate(R.layout.fragment_market, container, false);
+        View view = inflater.inflate(R.layout.fragment_instructions, container, false);
             MMTextView tvIstruction = (MMTextView) view.findViewById(R.id.tvInstruction);
             tvIstruction.setText(String.valueOf(position));
             switch (position) {

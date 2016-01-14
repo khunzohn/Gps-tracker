@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.hilllander.khunzohn.gpstracker.MarketingActivity;
+import com.hilllander.khunzohn.gpstracker.InstructionsActivity;
 import com.hilllander.khunzohn.gpstracker.fragment.MarketingFragments;
 
 public class MarketingPagerAdapter extends FragmentStatePagerAdapter {
@@ -21,6 +21,6 @@ public class MarketingPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return MarketingActivity.NUM_PAGES;
+        return InstructionsActivity.NUM_PAGES;
     }
 }

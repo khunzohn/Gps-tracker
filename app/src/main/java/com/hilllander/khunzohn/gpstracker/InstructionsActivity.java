@@ -14,11 +14,11 @@ import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MarketingActivity extends AppCompatActivity {
+public class InstructionsActivity extends AppCompatActivity {
 
     public static final int NUM_PAGES = 4;
     public static final String KEY_FIRST_APP_LAUNCH = "key using for first app Launch";
-    private static final String TAG = Logger.generateTag(MarketingActivity.class);
+    private static final String TAG = Logger.generateTag(InstructionsActivity.class);
     View selectedIndicator;
     private ViewPager pager;
     private int currentItem = 0;
@@ -26,7 +26,7 @@ public class MarketingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_market);
+        setContentView(R.layout.activity_instructions);
         ViewUtils.setStatusBarTint(this, R.color.colorPrimaryDark);
         pager = (ViewPager) findViewById(R.id.pager);
         final View iZero = findViewById(R.id.indicatorZero);
@@ -102,7 +102,7 @@ public class MarketingActivity extends AppCompatActivity {
     }
 
     private void gotoConnectActivity() {
-        Intent intent = new Intent(MarketingActivity.this, ConnectActivity.class);
+        Intent intent = new Intent(InstructionsActivity.this, ConnectActivity.class);
         intent.putExtra(KEY_FIRST_APP_LAUNCH, true);
         startActivity(intent);
         finish();

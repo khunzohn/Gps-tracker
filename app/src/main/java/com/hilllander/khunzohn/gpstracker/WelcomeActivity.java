@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void run() {
                 if (isFirstAppLaunch) {
                     sp.edit().putBoolean(KEY_FIRST_APP_LAUNCH, false).apply();
-                    Intent market = new Intent(WelcomeActivity.this, MarketingActivity.class);
+                    Intent market = new Intent(WelcomeActivity.this, InstructionsActivity.class);
                     startActivity(market);
                     finish();
                 } else {

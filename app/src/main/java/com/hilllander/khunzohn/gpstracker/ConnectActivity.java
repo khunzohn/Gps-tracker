@@ -66,7 +66,7 @@ public class ConnectActivity extends AppCompatActivity implements USSDReciever.O
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
             boolean upEnable = bundle.getBoolean(KEY_UP_ENABLE, false);
-            firstAppLaunch = bundle.getBoolean(MarketingActivity.KEY_FIRST_APP_LAUNCH, false);
+            firstAppLaunch = bundle.getBoolean(InstructionsActivity.KEY_FIRST_APP_LAUNCH, false);
             ActionBar actionBar = getSupportActionBar();
             if (null != actionBar) {
                 actionBar.setDisplayHomeAsUpEnabled(upEnable);

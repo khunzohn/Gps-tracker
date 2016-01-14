@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MarketingActivity"
+            android:name=".InstructionsActivity"
             android:label="@string/title_activity_market"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
