@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.hilllander.khunzohn.gpstracker.adapter.MainRecyclerAdapter;
 import com.hilllander.khunzohn.gpstracker.database.dao.DeviceDao;
 import com.hilllander.khunzohn.gpstracker.database.model.Device;
+import com.hilllander.khunzohn.gpstracker.fragment.UsedLibrariesDialog;
 import com.hilllander.khunzohn.gpstracker.util.Logger;
 import com.hilllander.khunzohn.gpstracker.util.ViewUtils;
 
@@ -89,6 +92,22 @@ public class MainActivity extends AppCompatActivity implements
                 getAllDevicesFromDb.execute();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (R.id.action_libraries == id) {
+            UsedLibrariesDialog dialog = new UsedLibrariesDialog();
+            dialog.show(getFragmentManager(), "Dialog");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mmtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:drawableLeft="@drawable/ic_my_location_black_18dp"
+        android:drawableStart="@drawable/ic_my_location_black_18dp"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/text_view_padding"
+        android:textColor="@android:color/black"
+        tools:text="mmtext" />
+
+    <TextView
+        android:id="@+id/circularImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:drawableLeft="@drawable/ic_my_location_black_18dp"
+        android:drawableStart="@drawable/ic_my_location_black_18dp"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/text_view_padding"
+        android:textColor="@android:color/black"
+        tools:text="Circle Image View" />
+
+    <TextView
+        android:id="@+id/systemBarTint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:drawableLeft="@drawable/ic_my_location_black_18dp"
+        android:drawableStart="@drawable/ic_my_location_black_18dp"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/text_view_padding"
+        android:textColor="@android:color/black"
+        tools:text="Circle Image View" />
+
+    <mm.technomation.mmtext.MMButtonView
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/cardview_margin"
+        android:text="@string/button_ok"
+        android:textColor="@color/green_500" />
+</LinearLayout>

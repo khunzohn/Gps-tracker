@@ -93,4 +93,10 @@
     <string name="permission_required_toast">Location permission is required to locate the device location.</string>
     <string name="permission_rationale_location">Location permission is required to locate  device location.</string>
     <string name="advance_institute_taunggyi">Brought to you by \n ADVANCE Institute Taunggyi</string>
+    <string name="action_libraries">Used libraries</string>
+    <string name="ic_used_libraries_bullet_content_description">bullet used for used libraries text</string>
+    <string name="mmText">&lt;a href=\"https://github.com/htoomyintnaung/mmtext\">mmText&lt;/a> by Ko Htoo Myint Naung</string>
+    <string name="system_bar_tint">&lt;a href=\"https://github.com/jgilfelt/SystemBarTint\">SystemBarTint&lt;/a> by Jeff Gilfelt</string>
+    <string name="circular_image_view">&lt;a href=\"https://github.com/hdodenhof/CircleImageView\">CircleImageView&lt;/a> by Henning Dodenhof</string>
 </resources>
+
